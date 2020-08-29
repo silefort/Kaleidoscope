@@ -423,6 +423,28 @@ compile () {
     FQBN="${SAVED_FQBN}"
 }
 
+compile_cli () {
+    build_version
+    build_paths
+    build_filenames
+
+    install -d "${OUTPUT_PATH}"
+
+    SKETCH_DIR="$(find_sketch)"
+
+    echo "Building ${SKETCH_DIR}/${SKETCH} ${LIB_VERSION} into ${OUTPUT_PATH}"
+
+    # This is defined in the (optional) user config.
+    # shellcheck disable=SC2154
+    ${compile_HOOKS}
+
+    export ARDUINO_DIRECTORIES_USER="${BOARD_HARDWARE_PATH}/.."
+    arduino-cli compile \
+                --build-path "${BUILD_PATH}" \
+                --build-cache-path "${BUILD_CACHE_PATH}" \
+                "examples/${LIBRARY}"
+}
+
 _find_all () {
     for plugin in ./*.ino \
   	              $([ -d examples ] && find examples -name '*.ino') \
@@ -464,6 +486,13 @@ compile_all () {
     done
 }
 
+compile_cli_all () {
+    plugins="$(_find_all)"
+
+    for plugin in ${plugins}; do
+        $0 "${plugin}" compile_cli
+    done
+}
 
 size () {
     if [ ! -e "${HEX_FILE_PATH}" ]; then
