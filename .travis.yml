@@ -13,7 +13,8 @@ install:
 ## This makes sure we're using the current version of the library.
   - rm -rf ../hardware/keyboardio/avr/libraries/Kaleidoscope
   - ln -s $(pwd) ../hardware/keyboardio/avr/libraries/Kaleidoscope
-  - (cd /usr/local; curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh)
+  - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+  - export PATH=${PATH}:$(pwd)/bin
   - arduino-cli core install arduino:avr
 script:
 #  - make travis-test KALEIDOSCOPE_TEMP_PATH=$(pwd)/.kaleidoscope-build-cache BOARD_HARDWARE_PATH=$(pwd)/../hardware
