@@ -70,3 +70,19 @@ $(info )
 endif
 
 include $(BOARD_HARDWARE_PATH)/$(KALEIDOSCOPE_PLUGIN_MAKEFILE_DIR)/rules.mk
+
+EXAMPLES=$(shell cd examples && find . -type f -name '*.ino' | xargs -n1 dirname | sed -e "s,^./,,")
+cli_test: ${EXAMPLES}
+	@:
+
+${EXAMPLES}:
+		arduino-cli compile \
+			--build-path=${CURDIR}/_build/$@ \
+			--output-dir=${CURDIR}/_build/$@/output \
+			-b $(shell grep fqbn examples/$@/sketch.json | cut -d: -f2- | sed -e 's,:avr:,:virtual:,') \
+			--build-properties compiler.path=${CURDIR}/tools/ \
+			--build-properties compiler.cpp.cmd=ccache-g++ \
+			--build-properties compiler.c.cmd=ccache-gcc \
+			--build-properties compiler.c.elf.cmd=ccache-g++ \
+			--build-properties compiler.cache_core=false \
+			examples/$@
