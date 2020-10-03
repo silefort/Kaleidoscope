@@ -136,12 +136,17 @@ find_sketch () {
         echo "SKETCH, LIBRARY, SOURCEDIR, and ROOT need to be set before including this file!" >&2
         exit 1
     fi
+  
+    SKETCH_DIR="$SKETCH"
+    SKETCH_FILE=$(basename "$SKETCH")
 
-    for path in "examples/${LIBRARY}" \
+    for path in "${SKETCH_DIR}" \
+		    "examples/${LIBRARY}" \
                     "src" \
 		    "."; do
-        if [ -f "${path}/${SKETCH}.ino" ]; then
+        if [ -f "${path}/${SKETCH_FILE}.ino" ]; then
       	    SKETCH_DIR="${path}"
+	    SKETCH="${SKETCH_FILE}"
             return
         fi
     done
@@ -734,12 +739,6 @@ for i in $(seq 1 $#); do
 done
 
 LIBRARY="${SKETCH}"
-
-case "${SKETCH}" in
-    */*)
-        SKETCH="$(basename "${SKETCH}")"
-        ;;
-esac
 
 export SKETCH
 export LIBRARY
