@@ -349,6 +349,7 @@ compile () {
 
     install -d "${OUTPUT_PATH}"
 
+    echo $SKETCH_IDENTIFIER
     SKETCH_DIR="$(find_sketch)"
 
     echo "Building ${SKETCH_DIR}/${SKETCH}"
