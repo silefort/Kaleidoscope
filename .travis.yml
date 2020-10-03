@@ -10,6 +10,8 @@ addons:
 env:
   global:
   - LC_ALL: C
+  - MAKEFLAGS="-j 4"
+
 git:
   quiet: true
 before_install: 
@@ -29,7 +31,7 @@ script:
   - ccache -s
   - sh bin/set-timestamps-from-git
   - make travis-install-arduino KALEIDOSCOPE_TEMP_PATH=$(pwd)/.kaleidoscope-build-cache BOARD_HARDWARE_PATH=$(pwd)/../hardware ARDUINO_PATH="$(pwd)/arduino-1.8.13"
-  - make -j 9 $TEST_TARGET KALEIDOSCOPE_TEMP_PATH=$(pwd)/.kaleidoscope-build-cache BOARD_HARDWARE_PATH=$(pwd)/../hardware ARDUINO_PATH="$(pwd)/arduino-1.8.13"
+  - make $TEST_TARGET KALEIDOSCOPE_TEMP_PATH=$(pwd)/.kaleidoscope-build-cache BOARD_HARDWARE_PATH=$(pwd)/../hardware ARDUINO_PATH="$(pwd)/arduino-1.8.13"
   - ccache -s
 notifications:
   email:
