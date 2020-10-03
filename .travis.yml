@@ -26,12 +26,10 @@ jobs:
     - env: TEST_TARGET=travis-smoke-examples
 script:
   - unset CC
-  - ls -lR .kaleidoscope-build-cache
   - ccache -s
   - sh bin/set-timestamps-from-git
   - make $TEST_TARGET KALEIDOSCOPE_TEMP_PATH=$(pwd)/.kaleidoscope-build-cache BOARD_HARDWARE_PATH=$(pwd)/../hardware ARDUINO_PATH="$(pwd)/arduino-1.8.13"
   - ccache -s
-  - ls -lR .kaleidoscope-build-cache
 notifications:
   email:
     on_success: change
