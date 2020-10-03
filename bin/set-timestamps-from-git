@@ -1,0 +1,11 @@
+#!/bin/bash -e
+
+
+for file in `find src examples -type f`
+do
+  timestamp=$(git log --pretty=format:%ad --date=format:%Y%m%d%H%M.%S -n 1 HEAD "$file" 2> /dev/null)
+  if [ "x$timestamp" != "x" ]; then
+    touch -t "$timestamp" "$file"
+  fi
+done
+
