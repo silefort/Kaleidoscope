@@ -23,12 +23,12 @@ install:
   - ln -s $(pwd) ../hardware/keyboardio/avr/libraries/Kaleidoscope
 jobs:
   include:
-    - env: TEST_TARGET=travis-smoke-examples
+    - env: TEST_TARGET=smoke-sketches
 script:
   - unset CC
   - ccache -s
   - sh bin/set-timestamps-from-git
-  - make $TEST_TARGET KALEIDOSCOPE_TEMP_PATH=$(pwd)/.kaleidoscope-build-cache BOARD_HARDWARE_PATH=$(pwd)/../hardware ARDUINO_PATH="$(pwd)/arduino-1.8.13"
+  - make -j 9 $TEST_TARGET KALEIDOSCOPE_TEMP_PATH=$(pwd)/.kaleidoscope-build-cache BOARD_HARDWARE_PATH=$(pwd)/../hardware ARDUINO_PATH="$(pwd)/arduino-1.8.13"
   - ccache -s
 notifications:
   email:
