@@ -1,5 +1,10 @@
 #!/bin/bash -e
 
+# This script sets all of the files inside src and example to have mtimes
+# that match the times of the last git commit that touched each file
+
+# This can be useful when build tools depend on file timestamps to
+# make caching decisions
 
 for file in `find src examples -type f`
 do
