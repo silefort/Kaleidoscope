@@ -32,15 +32,15 @@ install:
   - make prepare-ccache
 jobs:
   include:
-    - env: TEST_TARGET=smoke-sketches
-    - env: TEST_TARGET=travis-simulator-tests
-    - env: TEST_TARGET=cpplint
-    - env: TEST_TARGET=find-filename-conflicts 
-    - env: TEST_TARGET=shellcheck 
-    - env: TEST_TARGET=travis-check-astyle
+    - env: TEST_CMD="make -j 64 smoke-sketches"
+    - env: TEST_CMD="make travis-simulator-tests"
+    - env: TEST_CMD="make cpplint"
+    - env: TEST_CMD="make find-filename-conflicts"
+    - env: TEST_CMD="make shellcheck"
+    - env: TEST_CMD="make travis-check-astyle"
 script:
   - unset CC
-  - make -j 32 $TEST_TARGET 
+  - eval $TEST_CMD
 notifications:
   email:
     on_success: change
