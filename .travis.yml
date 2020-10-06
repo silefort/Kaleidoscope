@@ -32,7 +32,7 @@ install:
   - make prepare-ccache
 jobs:
   include:
-    - env: TEST_CMD="make -j 6 smoke-sketches"
+    - env: TEST_CMD="make -j 2 smoke-sketches"
     - env: TEST_CMD="CCACHE_NOT_SUPPORTED=1 make travis-simulator-tests"
     - env: TEST_CMD="make cpplint"
     - env: TEST_CMD="make find-filename-conflicts"
