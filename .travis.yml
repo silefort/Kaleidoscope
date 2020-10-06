@@ -27,12 +27,11 @@ install:
   - export BOARD_HARDWARE_PATH=$TRAVIS_BUILD_DIR/../hardware
   - export ARDUINO_PATH=$TRAVIS_BUILD_DIR/arduino-1.8.13
   - make adjust-git-timestamps
-  - wget https://downloads.arduino.cc/arduino-1.8.13-linuxaarch64.tar.xz
-  - tar xf arduino-1.8.13-linuxaarch64.tar.xz
+  - wget --quiet https://downloads.arduino.cc/arduino-1.8.13-linuxaarch64.tar.xz | tar xf
   - make prepare-ccache
 jobs:
   include:
-    - env: TEST_CMD="make -j 16 smoke-sketches"
+    - env: TEST_CMD="make -j 8 smoke-sketches"
     - env: TEST_CMD="make travis-simulator-tests"
     - env: TEST_CMD="make cpplint"
     - env: TEST_CMD="make find-filename-conflicts"
