@@ -28,7 +28,7 @@ install:
   - export ARDUINO_PATH=$TRAVIS_BUILD_DIR/arduino-1.8.13
   - make adjust-git-timestamps
   - wget https://downloads.arduino.cc/arduino-1.8.13-linuxaarch64.tar.xz
-  - tar xvf arduino-1.8.13-linuxaarch64.tar.xz
+  - tar xf arduino-1.8.13-linuxaarch64.tar.xz
   - make prepare-ccache
 jobs:
   include:
@@ -40,7 +40,7 @@ jobs:
     - env: TEST_TARGET=travis-check-astyle
 script:
   - unset CC
-  - make -j 2 $TEST_TARGET 
+  - make -j 32 $TEST_TARGET 
 notifications:
   email:
     on_success: change
