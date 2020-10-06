@@ -33,7 +33,7 @@ install:
 jobs:
   include:
     - env: TEST_CMD="make -j 12 smoke-sketches"
-    - env: TEST_CMD="make travis-simulator-tests"
+    - env: TEST_CMD="CCACHE_NOT_SUPPORTED=1 make travis-simulator-tests"
     - env: TEST_CMD="make cpplint"
     - env: TEST_CMD="make find-filename-conflicts"
     - env: TEST_CMD="make shellcheck"
