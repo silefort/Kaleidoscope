@@ -11,7 +11,7 @@ addons:
 env:
   global:
   - LC_ALL: C
-
+  - CCACHE_WRAPPER_PATH: /tmp/kaleidoscope-ccache
 git:
   quiet: true
 before_install: 
@@ -31,7 +31,7 @@ install:
   - make prepare-ccache
 jobs:
   include:
-    - env: TEST_CMD="make -j 12 smoke-sketches"
+    - env: TEST_CMD="make -j 14 smoke-sketches"
     - env: TEST_CMD="make travis-simulator-tests"
     - env: TEST_CMD="make cpplint"
     - env: TEST_CMD="make find-filename-conflicts"
