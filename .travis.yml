@@ -27,7 +27,7 @@ install:
   - export BOARD_HARDWARE_PATH=$TRAVIS_BUILD_DIR/../hardware
   - export ARDUINO_PATH=$TRAVIS_BUILD_DIR/arduino-1.8.13
   - make adjust-git-timestamps
-  - wget --quiet https://downloads.arduino.cc/arduino-1.8.13-linuxaarch64.tar.xz | tar xf
+  - wget --quiet https://downloads.arduino.cc/arduino-1.8.13-linuxaarch64.tar.xz | tar xf -
   - make prepare-ccache
 jobs:
   include:
