@@ -18,7 +18,7 @@ before_install:
   - ccache --set-config=compiler_check=content -M 1G -F 0
 
 install:
-  - git clone --depth 1 --recurse-submodules --shallow-submodules git://github.com/keyboardio/Kaleidoscope-Bundle-Keyboardio ../hardware/keyboardio
+  - git clone --depth 1 --recurse-submodules --jobs 16 --shallow-submodules git://github.com/keyboardio/Kaleidoscope-Bundle-Keyboardio ../hardware/keyboardio
 ## We delete the Bundle's version of Kaleidoscope, and symlink ourselves in.
 ## This makes sure we're using the current version of the library.
   - rm -rf ../hardware/keyboardio/avr/libraries/Kaleidoscope
@@ -27,11 +27,11 @@ install:
   - export BOARD_HARDWARE_PATH=$TRAVIS_BUILD_DIR/../hardware
   - export ARDUINO_PATH=$TRAVIS_BUILD_DIR/arduino-1.8.13
   - make adjust-git-timestamps
-  - wget https://downloads.arduino.cc/arduino-1.8.13-linuxaarch64.tar.xz -O - | tar xJf -
+  - wget --quiet https://downloads.arduino.cc/arduino-1.8.13-linuxaarch64.tar.xz -O - | tar xJf -
   - make prepare-ccache
 jobs:
   include:
-    - env: TEST_CMD="make -j 24 smoke-sketches"
+    - env: TEST_CMD="make -j 32 smoke-sketches"
     - env: TEST_CMD="make travis-simulator-tests"
     - env: TEST_CMD="make cpplint"
     - env: TEST_CMD="make find-filename-conflicts"
