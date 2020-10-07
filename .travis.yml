@@ -31,7 +31,6 @@ install:
   - export KALEIDOSCOPE_TEMP_PATH=$TRAVIS_BUILD_DIR/.kaleidoscope-build-cache
   - export BOARD_HARDWARE_PATH=$TRAVIS_BUILD_DIR/../hardware
   - export ARDUINO_PATH=$TRAVIS_BUILD_DIR/arduino-1.8.13
-  - make adjust-git-timestamps
   - wget --quiet $ARDUINO_DOWNLOAD_URL -O - | tar xJf -
   - make prepare-ccache
 jobs:
@@ -51,7 +50,4 @@ notifications:
     on_failure: change
 cache:
   apt: true
-  ccache: true
-  directories:
-    - .download-cache
-    - .kaleidoscope-build-cache
+  ccache: false
