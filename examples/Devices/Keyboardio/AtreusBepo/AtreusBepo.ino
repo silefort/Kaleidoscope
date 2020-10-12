@@ -22,6 +22,7 @@
 #endif
 
 #include "Kaleidoscope.h"
+#include "kaleidoscope/lang/fr_azerty.h"
 #include "Kaleidoscope-EEPROM-Settings.h"
 #include "Kaleidoscope-EEPROM-Keymap.h"
 #include "Kaleidoscope-FocusSerial.h"
@@ -54,19 +55,11 @@ enum {
   KEY_DOT,
   KEY_CCEDILLA,
   KEY_CIRCUMFLEX,
-  KEY_AT,
-  KEY_PIPE,
-  KEY_AMPERSAND,
   KEY_OELIG,
   KEY_AELIG,
   KEY_UGRAVE,
   KEY_UMLAUT,
-  KEY_EURO,
-  KEY_BACKSLASH,
-  KEY_LBRACES,
-  KEY_RBRACES,
   KEY_TRIPLEDOT,
-  KEY_TILDE,
   KEY_OPENQUOTE,
   KEY_CLOSEQUOTE,
   KEY_APOSTROPHE
@@ -136,22 +129,22 @@ KEYMAPS(
    [BEPO] = KEYMAP_STACKED
   (
        Key_B          ,M(KEY_EACUTE)  ,Key_P       ,Key_O         ,M(KEY_EGRAVE)
-      ,Key_Q          ,Key_U          ,Key_I       ,Key_E         ,M(KEY_COMMA)
+      ,Fr_A           ,Key_U          ,Key_I       ,Key_E         ,M(KEY_COMMA)
       ,M(KEY_AGRAVE)  ,Key_Y          ,Key_X       ,M(KEY_DOT)    ,Key_K         ,M(KEY_CCEDILLA)
-      ,Key_Esc        ,Key_Tab        ,Key_LeftGui ,Key_LeftShift ,Key_Backspace ,Key_Z
+      ,Key_Esc        ,Key_Tab        ,Key_LeftGui ,Key_LeftShift ,Key_Backspace ,Fr_W
 
                       ,M(KEY_CIRCUMFLEX)  ,Key_V          ,Key_D            ,Key_L         ,Key_J
                       ,Key_C              ,Key_T          ,Key_S            ,Key_R         ,Key_N
        ,Key_W         ,M(KEY_APOSTROPHE)  ,Key_A          ,Key_G            ,Key_H         ,Key_F
-       ,Key_Semicolon ,Key_Space          ,Key_6   ,MoveToLayer(QWERTY)     ,M(KEY_AT)     ,Key_Enter
+       ,Fr_M          ,Key_Space          ,Key_6   ,MoveToLayer(QWERTY)     ,Fr_At         ,Key_Enter
    ),
 
    [ALT_GR] = KEYMAP_STACKED
   (
-       M(KEY_PIPE)      ,___            ,M(KEY_AMPERSAND) ,M(KEY_OELIG)      ,___
-      ,M(KEY_AELIG)     ,M(KEY_UGRAVE)  ,M(KEY_UMLAUT)    ,M(KEY_EURO)       ,Key_4
-      ,M(KEY_BACKSLASH) ,M(KEY_LBRACES) ,M(KEY_RBRACES)   ,M(KEY_TRIPLEDOT)  ,M(KEY_TILDE)      ,___
-      ,___              ,___            ,___              ,___               ,Key_8             ,___
+       Fr_Pipe          ,___            ,Fr_Ampersand     ,M(KEY_OELIG)      ,___
+      ,M(KEY_AELIG)     ,M(KEY_UGRAVE)  ,M(KEY_UMLAUT)    ,Fr_Euro           ,Fr_Quote
+      ,Fr_Backslash     ,Fr_LeftCurly   ,Fr_RightCurly    ,M(KEY_TRIPLEDOT)  ,Fr_Tilde       ,___
+      ,___              ,___            ,___              ,___                ,Fr_Underscore  ,___
 
                ,___    ,___                ,___     ,___      ,___
                ,___    ,Key_LeftShift      ,___     ,___      ,___
@@ -161,10 +154,10 @@ KEYMAPS(
 
   [LEFT_LAYER] = KEYMAP_STACKED
   (
-       Key_Keypad1         ,Key_Keypad2            ,Key_Keypad3        ,Key_Keypad4     ,Key_Keypad5
-      ,Key_Backslash       ,RALT(Key_3)            ,Key_5              ,Key_Minus       ,___
-      ,LSHIFT(Key_Period)  ,Key_RightBracket  ,RALT(Key_5)        ,RALT(Key_Minus) ,___            ,___
-      ,___                 ,___                    ,___                ,___             ,Key_Backspace  ,Key_Delete
+       Key_Keypad1         ,Key_Keypad2            ,Key_Keypad3        ,Key_Keypad4      ,Key_Keypad5
+      ,Fr_Asterisk         ,Fr_Hash                ,Fr_LeftParen       ,Fr_RightParen    ,___
+      ,LSHIFT(Key_Period)  ,Fr_Dollar              ,Fr_LeftBracket     ,Fr_RightBracket  ,___            ,___
+      ,___                 ,___                    ,___                ,___              ,Key_Backspace  ,Key_Delete
 
                ,___    ,___            ,Key_UpArrow     ,___             ,___
                ,___    ,Key_LeftArrow  ,Key_DownArrow   ,Key_RightArrow  ,Key_LeftShift
@@ -179,10 +172,10 @@ KEYMAPS(
       ,___   ,___   ,___   ,___            ,___    ,___
       ,___   ,___   ,___   ,___            ,___    ,___
 
-             ,Key_Keypad6  ,Key_Keypad7                 ,Key_Keypad8                          ,Key_Keypad9                    ,Key_Keypad0
-             ,___          ,Key_NonUsBackslashAndPipe   ,LSHIFT(Key_NonUsBackslashAndPipe)    ,Key_3                          ,Key_Equals
-      ,___   ,___          ,M(KEY_OPENQUOTE)            ,M(KEY_CLOSEQUOTE)                    ,LSHIFT(Key_RightBracket)  ,LSHIFT(Key_Quote)
-      ,___   ,___          ,___                         ,___                                  ,___                            ,___
+             ,Key_Keypad6  ,Key_Keypad7         ,Key_Keypad8          ,Key_Keypad9                    ,Key_Keypad0
+             ,___          ,Fr_LessThan         ,Fr_GreaterThan       ,Fr_DoubleQuote                 ,Fr_Equals
+      ,___   ,___          ,M(KEY_OPENQUOTE)    ,M(KEY_CLOSEQUOTE)    ,LSHIFT(Key_RightBracket)       ,Fr_Percent
+      ,___   ,___          ,___                 ,___                  ,___                            ,___
    )  
 )
 /* *INDENT-ON* */
@@ -231,163 +224,139 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
   case KEY_EGRAVE:
      if (HostOS.os() == kaleidoscope::hostos::LINUX)
        if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), D(RightAlt), T(7), U(RightAlt));
+        return MACRODOWN(I(15), D(RightAlt), T(7), U(RightAlt));
       else
-        return MACRODOWN(I(5), T(7));
+        return MACRODOWN(I(15), T(7));
     else {
       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad2), T(Keypad0), T(Keypad0), U(LeftAlt), D(LeftShift));
+        return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad2), T(Keypad0), T(Keypad0), U(LeftAlt), D(LeftShift));
       else
-        return MACRODOWN(I(5), T(7));
+        return MACRODOWN(I(15), T(7));
     }
     break;
   case KEY_EACUTE:
      if (HostOS.os() == kaleidoscope::hostos::LINUX)
        if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), D(RightAlt), T(2), U(RightAlt));
+        return MACRODOWN(I(15), D(RightAlt), T(2), U(RightAlt));
       else
-        return MACRODOWN(I(5), T(2));
+        return MACRODOWN(I(15), T(2));
     else {
       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), U(LeftShift), D(LeftAlt), T(Keypad1), T(Keypad4), T(Keypad4), U(LeftAlt), D(LeftShift));
+        return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad1), T(Keypad4), T(Keypad4), U(LeftAlt), D(LeftShift));
       else
-        return MACRODOWN(I(5), T(2));
+        return MACRODOWN(I(15), T(2));
     }
     break;
   case KEY_COMMA:
     if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-      return MACRODOWN(I(5), U(LeftShift), T(Comma), D(LeftShift));
+      return MACRODOWN(I(15), U(LeftShift), T(Comma), D(LeftShift));
     else
-      return MACRODOWN(I(5), T(M));
+      return MACRODOWN(I(15), T(M));
     break;
   case KEY_AGRAVE:
      if (HostOS.os() == kaleidoscope::hostos::LINUX)
        if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), D(RightAlt), T(0), U(RightAlt));
+        return MACRODOWN(I(15), D(RightAlt), T(0), U(RightAlt));
       else
-        return MACRODOWN(I(5), T(0));
+        return MACRODOWN(I(15), T(0));
     else {
       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad9), T(Keypad2), U(LeftAlt), D(LeftShift));
+        return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad9), T(Keypad2), U(LeftAlt), D(LeftShift));
       else
-        return MACRODOWN(I(5), T(0));
+        return MACRODOWN(I(15), T(0));
     }
     break;
   case KEY_DOT:
     if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-      return MACRODOWN(I(5), U(LeftShift), T(Period), U(LeftShift));
+      return MACRODOWN(I(15), U(LeftShift), T(Period), U(LeftShift));
     else
-      return MACRODOWN(I(5), D(LeftShift), T(Comma), U(LeftShift));
+      return MACRODOWN(I(15), D(LeftShift), T(Comma), U(LeftShift));
     break;
   case KEY_CCEDILLA:
      if (HostOS.os() == kaleidoscope::hostos::LINUX)
        if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), D(RightAlt), T(9), U(RightAlt));
+        return MACRODOWN(I(15), D(RightAlt), T(9), U(RightAlt));
       else
-        return MACRODOWN(I(5), T(9));
+        return MACRODOWN(I(15), T(9));
     else {
       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad9), T(Keypad9), U(LeftAlt), D(LeftShift));
+        return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad9), T(Keypad9), U(LeftAlt), D(LeftShift));
       else
-        return MACRODOWN(I(5), T(9));
+        return MACRODOWN(I(15), T(9));
     }
     break;
   case KEY_CIRCUMFLEX:
     if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-     return MACRODOWN(U(LeftShift), T(Slash), D(LeftShift));
+     return MACRODOWN(I(15), U(LeftShift), T(Slash), D(LeftShift));
     else
      return MACRODOWN(T(LeftBracket));
     break;
-  case KEY_AT:
-    return MACRODOWN(I(5), D(RightAlt), T(0), U(RightAlt));
-    break;
-  case KEY_PIPE:
-    return MACRODOWN(I(5), D(RightAlt), T(6), U(RightAlt));
-    break;
-  case KEY_AMPERSAND:
-    return MACRODOWN(I(5), T(1));
-    break;
   case KEY_OELIG:
     if (HostOS.os() == kaleidoscope::hostos::LINUX)  
-      return MACRODOWN(I(5), D(RightAlt), T(O), U(RightAlt));
+      return MACRODOWN(I(15), D(RightAlt), T(O), U(RightAlt));
     else {
       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad4), T(Keypad0), U(LeftAlt), D(LeftShift));
+        return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad4), T(Keypad0), U(LeftAlt), D(LeftShift));
       else
-        return MACRODOWN(I(5), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad5), T(Keypad6), U(LeftAlt));
+        return MACRODOWN(I(15), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad5), T(Keypad6), U(LeftAlt));
     }
     break;
   case KEY_AELIG:
     if (HostOS.os() == kaleidoscope::hostos::LINUX) 
-      return MACRODOWN(I(5), D(RightAlt), T(Q), U(RightAlt));
+      return MACRODOWN(I(15), D(RightAlt), T(Q), U(RightAlt));
     else {
       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), U(LeftShift), D(LeftAlt), T(Keypad1), T(Keypad4), T(Keypad6), U(LeftAlt), D(LeftShift));
+        return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad1), T(Keypad4), T(Keypad6), U(LeftAlt), D(LeftShift));
       else
-        return MACRODOWN(I(5), D(LeftAlt), T(Keypad1), T(Keypad4), T(Keypad5), U(LeftAlt));
+        return MACRODOWN(I(15), D(LeftAlt), T(Keypad1), T(Keypad4), T(Keypad5), U(LeftAlt));
     }
     break;
   case KEY_UGRAVE:
       if (HostOS.os() == kaleidoscope::hostos::LINUX)
        if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), D(RightAlt), T(Quote), U(RightAlt));
+        return MACRODOWN(I(15), D(RightAlt), T(Quote), U(RightAlt));
       else
-        return MACRODOWN(I(5), T(Quote));
+        return MACRODOWN(I(15), T(Quote));
     else {
       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad2), T(Keypad1), T(Keypad7), U(LeftAlt), D(LeftShift));
+        return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad2), T(Keypad1), T(Keypad7), U(LeftAlt), D(LeftShift));
       else
-        return MACRODOWN(I(5), T(Quote));
+        return MACRODOWN(I(15), T(Quote));
     }
     break;
   case KEY_UMLAUT:
-    return MACRODOWN(I(5), D(LeftShift), T(LeftCurlyBracket), U(LeftShift));
-    break;
-  case KEY_EURO:
-    return MACRODOWN(I(5), D(RightAlt), T(E), U(RightAlt));
-    break;
-  case KEY_BACKSLASH:
-    return MACRODOWN(I(5), D(RightAlt), T(8), U(RightAlt));
-    break;
-  case KEY_LBRACES:
-    return MACRODOWN(I(5), D(RightAlt), T(4), U(RightAlt));
-    break;
-  case KEY_RBRACES:
-    return MACRODOWN(I(5), D(RightAlt), T(Equals), U(RightAlt));
+    return MACRODOWN(I(15), D(LeftShift), T(LeftCurlyBracket), U(LeftShift));
     break;
   case KEY_TRIPLEDOT:
       if (HostOS.os() == kaleidoscope::hostos::LINUX)
-        return MACRODOWN(I(5), D(LeftShift), D(RightAlt), T(M), U(RightAlt), U(LeftShift));
+        return MACRODOWN(I(15), D(LeftShift), D(RightAlt), T(M), U(RightAlt), U(LeftShift));
     else 
-        return MACRODOWN(I(5), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad3), T(Keypad3), U(LeftAlt));
-    break;
-  case KEY_TILDE:
-    return MACRODOWN(I(5), D(RightAlt), T(2), U(RightAlt));
+        return MACRODOWN(I(15), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad3), T(Keypad3), U(LeftAlt));
     break;
   case KEY_APOSTROPHE:
      if (HostOS.os() == kaleidoscope::hostos::LINUX)
        if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), T(M));
+        return MACRODOWN(I(15), T(M));
       else
-        return MACRODOWN(I(5), D(RightAlt), T(G), U(RightAlt));
+        return MACRODOWN(I(15), D(RightAlt), T(G), U(RightAlt));
     else {
       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
-        return MACRODOWN(I(5), T(M));
+        return MACRODOWN(I(15), T(M));
       else
-        return MACRODOWN(I(5), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad4), T(Keypad6), U(LeftAlt));
+        return MACRODOWN(I(15), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad4), T(Keypad6), U(LeftAlt));
     }
     break;
   case KEY_OPENQUOTE:
     if (HostOS.os() == kaleidoscope::hostos::LINUX)
-        return MACRODOWN(I(5), D(RightAlt), T(Z), U(RightAlt));
+        return MACRODOWN(I(15), D(RightAlt), T(Z), U(RightAlt));
     else 
-        return MACRODOWN(I(5), D(LeftAlt), T(Keypad1), T(Keypad7), T(Keypad4), U(LeftAlt));
+        return MACRODOWN(I(15), D(LeftAlt), T(Keypad1), T(Keypad7), T(Keypad4), U(LeftAlt));
     break;
   case KEY_CLOSEQUOTE:
     if (HostOS.os() == kaleidoscope::hostos::LINUX)
-        return MACRODOWN(I(5), D(RightAlt), T(X), U(RightAlt));
+        return MACRODOWN(I(15), D(RightAlt), T(X), U(RightAlt));
     else 
-        return MACRODOWN(I(5), D(LeftAlt),  T(Keypad1), T(Keypad7), T(Keypad5), U(LeftAlt));
+        return MACRODOWN(I(15), D(LeftAlt),  T(Keypad1), T(Keypad7), T(Keypad5), U(LeftAlt));
     break;
   default:
     break;
