@@ -4,35 +4,35 @@
 #define ALTGR RALT
 
 /* These are deviating from the us layout */
-#define Fr_Circumflex Key_LeftBracket /* ^ and ° */
-#define Fr_Trema LSHIFT(Fr_Circumflex) /* ° */
+#define Fr_Circumflex Key_LeftBracket /* ^ and ¨ */
+#define Fr_Trema LSHIFT(Fr_Circumflex) /* ¨ */
 
-#define Fr_ExlamationMark Key_1
-#define Fr_DoubleQuote LSHIFT(Fr_2)
-#define Fr_Paragraph LSHIFT(Fr_3)
-#define Fr_Dollar LSHIFT(Fr_4)
-#define Fr_Percent LSHIFT(Fr_5)
-#define Fr_Ampersand LSHIFT(Fr_6)
-#define Fr_Slash LSHIFT(Fr_7)
-#define Fr_LeftParen LSHIFT(Fr_8)
-#define Fr_RightParen LSHIFT(Fr_9)
-#define Fr_Equals LSHIFT(Fr_0)
-#define Fr_QuestionMark LSHIFT(Fr_SZ)
-#define Fr_LeftCurly ALTGR(Fr_7)
-#define Fr_RightCurly ALTGR(Fr_0)
-#define Fr_LeftBracket ALTGR(Fr_8)
-#define Fr_RightBracket ALTGR(Fr_9)
-#define Fr_Backslash ALTGR(Fr_SZ)
+#define Fr_ExlamationMark Key_Slash
+#define Fr_DoubleQuote Key_3
+#define Fr_Paragraph LSHIFT(Fr_ExlamationMark)
+#define Fr_Dollar Key_RightBracket
+#define Fr_Pound LSHIFT(Key_RightBracket)
+#define Fr_Percent LSHIFT(Key_Quote)
+#define Fr_Ampersand Key_1
+#define Fr_Slash LSHIFT(Key_Period)
+#define Fr_LeftParen Key_5
+#define Fr_RightParen Key_Minus
+#define Fr_Equals Key_Equals
+#define Fr_QuestionMark LSHIFT(Key_M)
+#define Fr_LeftCurly ALTGR(Key_4)
+#define Fr_RightCurly ALTGR(Key_Equals)
+#define Fr_LeftBracket ALTGR(Key_5)
+#define Fr_RightBracket ALTGR(Key_Minus)
+#define Fr_Backslash ALTGR(Key_8)
 
-#define Fr_Tick Key_Equals /* Tick ´ and Backtick ` */
-#define Fr_Backtick LSHIFT(Fr_Tick)
+#define Fr_Backtick ALTGR(Key_7)
 
-#define Fr_At ALTGR(Fr_Q)
+#define Fr_At ALTGR(Key_0)
 #define Fr_Euro ALTGR(Fr_E)
 
-#define Fr_Plus Key_RightBracket /* Plus + Asterisk * and Tilde ~ */
-#define Fr_Asterisk LSHIFT(Fr_Plus) /* * */
-#define Fr_Tilde ALTGR(Fr_Plus) /* ~ */
+#define Fr_Plus LSHIFT(Key_Equals) /* Plus + Asterisk * and Tilde ~ */
+#define Fr_Asterisk Key_Backslash /* * */
+#define Fr_Tilde ALTGR(Key_2) /* ~ */
 
 #define Fr_Hash ALTGR(Key_3) /* # */
 #define Fr_Quote Key_4
@@ -41,8 +41,8 @@
 #define Fr_GreaterThan LSHIFT(Fr_LessThan)
 #define Fr_Pipe ALTGR(Key_6)
 
-#define Fr_Minus Key_Slash /* - and _ */
-#define Fr_Underscore LSHIFT(Fr_Minus)
+#define Fr_Minus Key_6 /* - and _ */
+#define Fr_Underscore Key_8
 
 /* the default keys are just aliased to have them look the same */
 #define Fr_NoEvent Key_NoEvent
@@ -61,7 +61,7 @@
 #define Fr_J Key_J
 #define Fr_K Key_K
 #define Fr_L Key_L
-#define Fr_M Key_Comma
+#define Fr_M Key_Semicolon
 #define Fr_N Key_N
 #define Fr_O Key_O
 #define Fr_P Key_P
@@ -92,9 +92,9 @@
 #define Fr_Tab Key_Tab
 #define Fr_Spacebar Key_Spacebar
 #define Fr_Comma Key_M
-#define Fr_Semicolon LSHIFT(Fr_Comma)
-#define Fr_Period Key_Period
-#define Fr_Colon LSHIFT(Fr_Period)
+#define Fr_Semicolon Key_Comma
+#define Fr_Period LSHIFT(Fr_Semicolon)
+#define Fr_Colon Key_Period
 
 #define Fr_CapsLock Key_CapsLock
 #define Fr_F1 Key_F1
