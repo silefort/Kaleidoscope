@@ -128,15 +128,15 @@ KEYMAPS(
 
    [BEPO] = KEYMAP_STACKED
   (
-       Key_B          ,M(KEY_EACUTE)  ,Key_P       ,Key_O         ,M(KEY_EGRAVE)
-      ,Fr_A           ,Key_U          ,Key_I       ,Key_E         ,M(KEY_COMMA)
-      ,M(KEY_AGRAVE)  ,Key_Y          ,Key_X       ,M(KEY_DOT)    ,Key_K         ,M(KEY_CCEDILLA)
-      ,Key_Esc        ,Key_Tab        ,Key_LeftGui ,Key_LeftShift ,Key_Backspace ,Fr_W
+       Fr_B           ,M(KEY_EACUTE)  ,Fr_P        ,Fr_O          ,M(KEY_EGRAVE)
+      ,Fr_A           ,Fr_U           ,Fr_I        ,Fr_E          ,M(KEY_COMMA)
+      ,M(KEY_AGRAVE)  ,Fr_Y           ,Fr_X        ,M(KEY_DOT)    ,Fr_K          ,M(KEY_CCEDILLA)
+      ,Fr_Escape      ,Fr_Tab         ,Fr_LeftGui  ,Fr_LeftShift  ,Fr_Backspace  ,Fr_W
 
-                      ,M(KEY_CIRCUMFLEX)  ,Key_V          ,Key_D            ,Key_L         ,Key_J
-                      ,Key_C              ,Key_T          ,Key_S            ,Key_R         ,Key_N
-       ,Key_W         ,M(KEY_APOSTROPHE)  ,Key_A          ,Key_G            ,Key_H         ,Key_F
-       ,Fr_M          ,Key_Space          ,Key_6   ,MoveToLayer(QWERTY)     ,Fr_At         ,Key_Enter
+                      ,M(KEY_CIRCUMFLEX)  ,Fr_V           ,Fr_D               ,Fr_L          ,Fr_J
+                      ,Fr_C               ,Fr_T           ,Fr_S               ,Fr_R          ,Fr_N
+       ,Fr_Z          ,M(KEY_APOSTROPHE)  ,Fr_Q           ,Fr_G               ,Fr_H          ,Fr_F
+       ,Fr_M          ,Fr_Spacebar        ,Fr_Minus   ,MoveToLayer(QWERTY)    ,Fr_At         ,Fr_Enter
    ),
 
    [ALT_GR] = KEYMAP_STACKED
@@ -144,25 +144,25 @@ KEYMAPS(
        Fr_Pipe          ,___            ,Fr_Ampersand     ,M(KEY_OELIG)      ,___
       ,M(KEY_AELIG)     ,M(KEY_UGRAVE)  ,M(KEY_UMLAUT)    ,Fr_Euro           ,Fr_Quote
       ,Fr_Backslash     ,Fr_LeftCurly   ,Fr_RightCurly    ,M(KEY_TRIPLEDOT)  ,Fr_Tilde       ,___
-      ,___              ,___            ,___              ,___                ,Fr_Underscore  ,___
+      ,___              ,___            ,___              ,___               ,Fr_Underscore  ,___
 
                ,___    ,___                ,___     ,___      ,___
-               ,___    ,Key_LeftShift      ,___     ,___      ,___
+               ,___    ,Fr_LeftShift       ,___     ,___      ,___
        ,___    ,___    ,___                ,___     ,___      ,___
        ,___    ,___    ,___                ,___     ,___      ,___
    ),
 
   [LEFT_LAYER] = KEYMAP_STACKED
   (
-       Key_Keypad1         ,Key_Keypad2            ,Key_Keypad3        ,Key_Keypad4      ,Key_Keypad5
+       Fr_1                ,Fr_2                   ,Fr_3               ,Fr_4             ,Fr_5
       ,Fr_Asterisk         ,Fr_Hash                ,Fr_LeftParen       ,Fr_RightParen    ,___
       ,LSHIFT(Key_Period)  ,Fr_Dollar              ,Fr_LeftBracket     ,Fr_RightBracket  ,___            ,___
-      ,___                 ,___                    ,___                ,___              ,Key_Backspace  ,Key_Delete
+      ,___                 ,___                    ,___                ,___              ,Fr_Backspace   ,Fr_Delete
 
-               ,___    ,___            ,Key_UpArrow     ,___             ,___
-               ,___    ,Key_LeftArrow  ,Key_DownArrow   ,Key_RightArrow  ,Key_LeftShift
-       ,___    ,___    ,___            ,___             ,___             ,___
-       ,___    ,___    ,___            ,___             ,___             ,___
+               ,___    ,___            ,Fr_UpArrow     ,___             ,___
+               ,___    ,Fr_LeftArrow   ,Fr_DownArrow   ,Fr_RightArrow   ,Fr_LeftShift
+       ,___    ,___    ,___            ,___            ,___             ,___
+       ,___    ,___    ,___            ,___            ,___             ,___
    ),
 
    [RIGHT_LAYER] = KEYMAP_STACKED
@@ -172,10 +172,10 @@ KEYMAPS(
       ,___   ,___   ,___   ,___            ,___    ,___
       ,___   ,___   ,___   ,___            ,___    ,___
 
-             ,Key_Keypad6  ,Key_Keypad7         ,Key_Keypad8          ,Key_Keypad9                    ,Key_Keypad0
-             ,___          ,Fr_LessThan         ,Fr_GreaterThan       ,Fr_DoubleQuote                 ,Fr_Equals
-      ,___   ,___          ,M(KEY_OPENQUOTE)    ,M(KEY_CLOSEQUOTE)    ,LSHIFT(Key_RightBracket)       ,Fr_Percent
-      ,___   ,___          ,___                 ,___                  ,___                            ,___
+             ,Fr_6         ,Fr_7                ,Fr_8                 ,Fr_9                 ,Fr_0
+             ,___          ,Fr_LessThan         ,Fr_GreaterThan       ,Fr_DoubleQuote       ,Fr_Equals
+      ,___   ,___          ,M(KEY_OPENQUOTE)    ,M(KEY_CLOSEQUOTE)    ,Fr_Pound             ,Fr_Percent
+      ,___   ,___          ,___                 ,___                  ,___                  ,___
    )  
 )
 /* *INDENT-ON* */

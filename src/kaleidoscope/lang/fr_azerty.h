@@ -111,26 +111,14 @@
 #define Fr_F12 Key_F12
 
 #define Fr_PrintScreen Key_PrintScreen
-#define Fr_Drucken Fr_PrintScreen
-#define Fr_Druck Fr_PrintScreen
 #define Fr_ScrollLock Key_ScrollLock
-#define Fr_Rollen Fr_ScrollLock
 #define Fr_Pause Key_Pause
 #define Fr_Insert Key_Insert
-#define Fr_Einfuegen Fr_Insert
-#define Fr_Einfg Fr_Insert
 #define Fr_Home Key_Home
-#define Fr_Position1 Fr_Home
-#define Fr_Pos1 Fr_Home
 #define Fr_PageUp Key_PageUp
-#define Fr_BildAuf Fr_PageUp
 #define Fr_Delete Key_Delete
-#define Fr_Entfernen Fr_Delete
-#define Fr_Entf Fr_Delete
 #define Fr_End Key_End
-#define Fr_Ende Fr_End
 #define Fr_PageDown Key_PageDown
-#define Fr_BildAb Fr_PageDown
 #define Fr_RightArrow Key_RightArrow
 #define Fr_LeftArrow Key_LeftArrow
 #define Fr_DownArrow Key_DownArrow
@@ -152,9 +140,6 @@
 #define Fr_Keypad8 Key_Keypad8
 #define Fr_Keypad9 Key_Keypad9
 #define Fr_Keypad0 Key_Keypad0
-
-/* German uses comma for decimals */
-#define Fr_KeypadComma Key_KeypadDot
 
 #define Fr_PcApplication Key_PcApplication
 #define Fr_Power Key_Power
