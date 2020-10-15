@@ -154,12 +154,12 @@ KEYMAPS(
 
   [LEFT_LAYER] = KEYMAP_STACKED
   (
-       Fr_1                ,Fr_2                   ,Fr_3               ,Fr_4             ,Fr_5
-      ,Fr_Asterisk         ,Fr_Hash                ,Fr_LeftParen       ,Fr_RightParen    ,___
-      ,LSHIFT(Key_Period)  ,Fr_Dollar              ,Fr_LeftBracket     ,Fr_RightBracket  ,___            ,___
-      ,___                 ,___                    ,___                ,___              ,Fr_Backspace   ,Fr_Delete
+       Fr_1           ,Fr_2                   ,Fr_3               ,Fr_4             ,Fr_5
+      ,Fr_Asterisk    ,Fr_Hash                ,Fr_LeftParen       ,Fr_RightParen    ,___
+      ,Fr_Slash       ,Fr_Dollar              ,Fr_LeftBracket     ,Fr_RightBracket  ,___            ,___
+      ,___            ,___                    ,___                ,Key_LeftShift    ,Fr_Backspace   ,Fr_Delete
 
-               ,___    ,___            ,Fr_UpArrow     ,___             ,___
+               ,___    ,Fr_Home        ,Fr_UpArrow     ,Fr_End          ,___
                ,___    ,Fr_LeftArrow   ,Fr_DownArrow   ,Fr_RightArrow   ,Fr_LeftShift
        ,___    ,___    ,___            ,___            ,___             ,___
        ,___    ,___    ,___            ,___            ,___             ,___
@@ -167,7 +167,7 @@ KEYMAPS(
 
    [RIGHT_LAYER] = KEYMAP_STACKED
   (
-       ___   ,___   ,___   ,___            ,___
+       ___   ,___   ,___   ,___            ,Fr_F5
       ,___   ,___   ,___   ,Key_LeftShift  ,___
       ,___   ,___   ,___   ,___            ,___    ,___
       ,___   ,___   ,___   ,___            ,___    ,___
