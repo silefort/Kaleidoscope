@@ -70,3 +70,70 @@ $(info )
 endif
 
 include $(BOARD_HARDWARE_PATH)/$(KALEIDOSCOPE_PLUGIN_MAKEFILE_DIR)/rules.mk
+
+
+prepare-virtual:
+	$(MAKE) -C $(BOARD_HARDWARE_PATH)/keyboardio prepare-virtual
+
+
+simulator-tests: prepare-virtual
+	$(MAKE) -C tests all
+
+docker-simulator-tests:
+	BOARD_HARDWARE_PATH="$(BOARD_HARDWARE_PATH)" ./bin/run-docker "make simulator-tests TEST_PATH=\"${TEST_PATH}\""
+
+run-tests: prepare-virtual build-gtest-gmock
+	$(MAKE) -c tests
+	@: # blah
+
+build-gtest-gmock:
+	(cd testing/googletest && cmake .)
+	$(MAKE) -C testing/googletest
+
+adjust-git-timestamps:
+	bin/set-timestamps-from-git
+
+find-filename-conflicts:
+	@if [ -d "bin" ]; then \
+		bin/find-filename-conflicts; \
+	fi
+
+#.PHONY: astyle test cpplint cpplint-noisy shellcheck smoke-examples find-filename-conflicts:
+
+astyle:
+	PATH="$(PLUGIN_TEST_BIN_DIR):$(PATH)" $(PLUGIN_TEST_SUPPORT_DIR)/quality/run-astyle
+
+check-astyle: astyle
+	PATH="$(PLUGIN_TEST_BIN_DIR):$(PATH)" $(PLUGIN_TEST_SUPPORT_DIR)/quality/astyle-check
+
+cpplint-noisy:
+	-$(PLUGIN_TEST_SUPPORT_DIR)/quality/cpplint.py  --filter=-legal/copyright,-build/include,-readability/namespace,-whitespace/line_length,-runtime/references  --recursive --extensions=cpp,h,ino --exclude=$(BOARD_HARDWARE_PATH) src examples
+
+
+cpplint:
+	$(PLUGIN_TEST_SUPPORT_DIR)/quality/cpplint.py  --quiet --filter=-whitespace,-legal/copyright,-build/include,-readability/namespace,-runtime/references  --recursive --extensions=cpp,h,ino src examples
+
+
+SHELL_FILES = $(shell if [ -d bin ]; then egrep -n -r -l "(env (ba)?sh)|(/bin/(ba)?sh)" bin; fi)
+
+shellcheck:
+	@if [ -d "bin" ]; then \
+		shellcheck ${SHELL_FILES}; \
+	fi
+
+
+check-docs:
+	doxygen $(PLUGIN_TEST_SUPPORT_DIR)/quality/etc/check-docs.conf 2> /dev/null >/dev/null
+	python $(PLUGIN_TEST_SUPPORT_DIR)/quality/doxy-coverage.py /tmp/undocced/xml
+
+
+SMOKE_SKETCHES=$(shell if [ -d ./examples ]; then find ./examples -type f -name \*ino | xargs -n 1 dirname; fi)
+
+smoke-sketches: $(SMOKE_SKETCHES)
+	@echo "Smoke-tested all the sketches"
+
+.PHONY: force
+
+
+$(SMOKE_SKETCHES): force
+	@BOARD_HARDWARE_PATH="$(BOARD_HARDWARE_PATH)" $(KALEIDOSCOPE_BUILDER_DIR)/kaleidoscope-builder $@ compile

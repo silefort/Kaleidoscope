@@ -33,24 +33,16 @@
   "For further information and examples on how to do that, \n"           __NL__ \
   "please see UPGRADING.md"
 
-#define _DEPRECATED_MESSAGE_HID_FACADE                                   __NL__ \
-  "The HID facade in the `kaleidoscope::hid` namespace is deprecated.\n" __NL__ \
-  "Please use `Kaleidoscope.hid()` instead."
+#define _DEPRECATED_MESSAGE_LAYER_DEACTIVATETOP  __NL__ \
+  "`Layer.deactivateTop()` is deprecated.\n"     __NL__ \
+  "Please use `Layer.deactivateMostRecent()` instead."
 
-#define _DEPRECATED_MESSAGE_DIRECT_KEY_MEMBER_ACCESS                           \
-  "Direct access to `Key` class' data members is deprecated.\n"                \
-  "Please use `Key::setKeyCode()`/`Key::getKeyCode()` or\n"                    \
-  "`Key::setFlags()`/`Key::getFlags()` instead.\n"                             \
-  "\n"                                                                         \
-  "For further information and examples on how to do that, \n"                 \
-  "please see UPGRADING.md."
+#define _DEPRECATED_MESSAGE_LAYER_TOP __NL__ \
+  "`Layer.top()` is deprecated.\n"    __NL__ \
+  "Please use `Layer.mostRecent()` instead."
 
-#define _DEPRECATED_MESSAGE_KEY_MEMBER_RAW_ACCESS                              \
-  "The member variable `raw` of class Key had to be removed. Please \n"        \
-  "use `Key::setRaw()`/`Key::getRaw()` to set and get raw data.\n"             \
-  "\n"                                                                         \
-  "Important: This is not a deprecation. Your code will compile but fail\n"    \
-  "           to link until all access to `Key::raw` has been replaced.\n"     \
-  "\n"                                                                         \
-  "For further information and examples on how to do that, \n"                 \
-  "please see UPGRADING.md."
+#define _DEPRECATED_MESSAGE_LAYER_GETLAYERSTATE    __NL__ \
+  "`Layer.getLayerState()` is deprecated.\n"       __NL__ \
+  "Layers are now in activation-order, please use" __NL__ \
+  "`Layer.forEachActiveLayer()` instead."
+

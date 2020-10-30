@@ -12,11 +12,11 @@ If any of this does not make sense to you, or you have trouble updating your .in
     - [Bidirectional communication for plugins](#bidirectional-communication-for-plugins)
     - [Consistent timing](#consistent-timing)
   + [Breaking changes](#breaking-changes)
-    - [Deprecation of the HID facade](#deprecation-of-the-hid-facade)
-    - [Implementation of type Key internally changed from C++ union to class](#implementation-of-type-key-internally-changed-from-union-to-class)
+    - [Layer system switched to activation-order](#layer-system-switched-to-activation-order)
     - [The `RxCy` macros and peeking into the keyswitch state](#the-rxcy-macros-and-peeking-into-the-keyswitch-state)
     - [HostOS](#hostos)
     - [MagicCombo](#magiccombo)
+    - [Qukeys](#qukeys)
     - [TypingBreaks](#typingbreaks)
     - [Redial](#redial)
     - [Key mapping has been deprecated](#key-mapping-has-been-deprecated)
@@ -25,6 +25,10 @@ If any of this does not make sense to you, or you have trouble updating your .in
 * [Removed APIs](#removed-apis)
 
 # Upgrade notes
+
+As a matter of policy, we try hard to give you at least 60 days notice before we permanently remove or break
+any API we've included in a release. Typically, this means that any code that uses the old API will emit a warning when compiled with a newer version of Kaleidoscope. In all cases, this document should explain how to update your code to use the new API.
+
 
 ## New features
 
@@ -314,13 +318,25 @@ As a developer, one can continue using `millis()`, but migrating to `Kaleidoscop
 
 ## Breaking changes
 
-### Deprecation of the HID facade
+### Layer system switched to activation order
 
-With the new Device APIs it became possible to replace the HID facade (the `kaleidoscope::hid` family of functions) with a driver. As such, the old APIs are deprecated, and will be removed by **2020-09-16**. Please use `Kaleidoscope.hid()` instead.
+The layer system used to be index-ordered, meaning that we'd look keys up on
+layers based on the _index_ of active layers. Kaleidoscope now uses activation
+order, which looks up keys based on the order of layer activation.
 
-### Implementation of type Key internally changed from C++ union to class
+This means that the following functions are deprecated, and will be removed by **2020-12-31**:
 
-The deprecated functions continue to work, but they will be removed by **2020-09-16**.
+- `Layer.top()`, which used to return the topmost layer index. Use
+  `Layer.mostRecent()` instead, which returns the most recently activated layer.
+  Until removed, the old function will return the most recent layer.
+- `Layer.deactivateTop()`, which used to return the topmost layer index. Use
+  `Layer.deactivateMostRecent()` instead. The old function will deactivate the
+  most recent layer.
+- `Layer.getLayerState()`, which used to return a bitmap of the active layers.
+  With activation-order, a simple bitmap is not enough. For now, we still return
+  the bitmap, but without the ordering, it is almost useless. Use
+  `Layer.forEachActiveLayer()` to walk the active layers in order (from least
+  recent to most).
 
 #### For end-users
 
@@ -482,6 +498,32 @@ If your actions made use of the `left_hand` or `right_hand` arguments of
 more involved to get to, out of scope for this simple migration guide. Please
 open an issue, or ask for help on the forums, and we'll help you.
 
+### Qukeys
+
+Older versions of the plugin used `row` and `col` indexing for defining `Qukey`
+objects. This has since been replaced with a single `KeyAddr` parameter in the
+constructor.
+
+Older versions of the plugin used a single timeout, configured via a
+`setTimeout()` method. For clarity, that method has been renamed to
+`setHoldTimeout()`.
+
+Older versions of the plugin used a configurable "release delay" value to give
+the user control over how Qukeys determined which value to assign to a qukey
+involved in rollover, via the `setReleaseDelay()` method. That release delay has
+been replaced with a better "overlap percentage" strategy, which makes the
+decision based on the percentage of the subsequent keypress's duration overlaps
+with the qukey's press. The configuration method is now `setOverlapThreshold()`,
+which accepts a value between 0 and 100 (interpreted as a percentage). User who
+used higher values for `setReleaseDelay()` will want a lower values for
+`setOverlapThreshold()`.
+
+These functions have been deprecated since 2019-08-22, and will be removed by **2020-12-31**:
+
+- `Qukeys.setTimeout(millis)`
+- `Qukeys.setReleaseDelay(millis)`
+- `Qukey(layer, row, col, alternate_key)`
+
 ### TypingBreaks
 
 Older versions of the plugin used to provide EEPROM storage for the settings only optionally, when it was explicitly enabled via the `TypingBreaks.enableEEPROM()` method. Similarly, the Focus hooks were optional too.
@@ -524,6 +566,16 @@ The following headers and names have changed:
 - [TapDance](plugins/TapDance.md) had the `kaleidoscope::TapDance::ActionType` type replaced by `kaleidoscope::plugin::TapDance::ActionType`.
 
 # Removed APIs
+
+### Removed on 2020-10-10
+
+### Deprecation of the HID facade
+
+With the new Device APIs it became possible to replace the HID facade (the `kaleidoscope::hid` family of functions) with a driver. As such, the old APIs are deprecated, and was removed on 2020-10-10. Please use `Kaleidoscope.hid()` instead.
+
+### Implementation of type Key internally changed from C++ union to class
+
+The deprecated functions were removed on 2020-10-10.
 
 ### Removed on 2020-06-16
 
