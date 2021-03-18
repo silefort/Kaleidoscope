@@ -26,40 +26,39 @@ absolute_filename() {
 
 
 build_version () {
+    : "${LIB_PROPERTIES_PATH:="../.."}"
     GIT_VERSION="$(cd "${SKETCH_DIR}"; if [ -d .git ]; then echo -n '-g' && git describe --abbrev=4 --dirty --always; fi)"
-    LIB_PROPERTIES_PATH="${LIB_PROPERTIES_PATH:-"../.."}"
     LIB_VERSION="$(cd "${SKETCH_DIR}"; (grep version= "${LIB_PROPERTIES_PATH}/library.properties" 2>/dev/null || echo version=0.0.0) | cut -d= -f2)${GIT_VERSION}"
 }
 
 build_paths() {
     # We need that echo because we\re piping to cksum
     # shellcheck disable=SC2005
-    SKETCH_IDENTIFIER="$(echo "$(absolute_filename "${SKETCH_DIR}/${SKETCH}.ino")" | cksum | cut -d ' ' -f 1)-${SKETCH}.ino"
-    KALEIDOSCOPE_TEMP_PATH="${KALEIDOSCOPE_TEMP_PATH:-${TMPDIR:-/tmp}/kaleidoscope-${USER}}"
+    SKETCH_IDENTIFIER="$(echo "${SKETCH_FILE_PATH}" | cksum | cut -d ' ' -f 1)-${SKETCH_FILE_NAME}"
+    : "${KALEIDOSCOPE_TEMP_PATH:=${TMPDIR:-/tmp}/kaleidoscope-${USER}}"
 
+    : "${KALEIDOSCOPE_BUILD_PATH:=${KALEIDOSCOPE_TEMP_PATH}/sketch}"
+    : "${KALEIDOSCOPE_OUTPUT_PATH:=${KALEIDOSCOPE_TEMP_PATH}/sketch}"
 
-    KALEIDOSCOPE_BUILD_PATH="${KALEIDOSCOPE_BUILD_PATH:-${KALEIDOSCOPE_TEMP_PATH}/sketch}"
-    KALEIDOSCOPE_OUTPUT_PATH="${KALEIDOSCOPE_OUTPUT_PATH:-${KALEIDOSCOPE_TEMP_PATH}/sketch}"
+    : "${SKETCH_OUTPUT_DIR:=${SKETCH_IDENTIFIER}/output}"
+    : "${SKETCH_BUILD_DIR:=${SKETCH_IDENTIFIER}/build}"
 
-    SKETCH_OUTPUT_DIR="${SKETCH_OUTPUT_DIR:-${SKETCH_IDENTIFIER}/output}"
-    SKETCH_BUILD_DIR="${SKETCH_BUILD_DIR:-${SKETCH_IDENTIFIER}/build}"
+    : "${BUILD_PATH:=${KALEIDOSCOPE_BUILD_PATH}/${SKETCH_BUILD_DIR}}"
+    : "${OUTPUT_PATH:=${KALEIDOSCOPE_OUTPUT_PATH}/${SKETCH_OUTPUT_DIR}}"
 
-    BUILD_PATH="${BUILD_PATH:-${KALEIDOSCOPE_BUILD_PATH}/${SKETCH_BUILD_DIR}}"
-    OUTPUT_PATH="${OUTPUT_PATH:-${KALEIDOSCOPE_OUTPUT_PATH}/${SKETCH_OUTPUT_DIR}}"
-
-    CCACHE_WRAPPER_PATH="${CCACHE_WRAPPER_PATH:-${KALEIDOSCOPE_TEMP_PATH}/ccache/bin}"
-    CORE_CACHE_PATH="${CORE_CACHE_PATH:-${KALEIDOSCOPE_TEMP_PATH}/arduino-cores}"
+    : "${CCACHE_WRAPPER_PATH:=${KALEIDOSCOPE_TEMP_PATH}/ccache/bin}"
+    : "${CORE_CACHE_PATH:=${KALEIDOSCOPE_TEMP_PATH}/arduino-cores}"
 
     mkdir -p "$CORE_CACHE_PATH"
     mkdir -p "$BUILD_PATH"
 }
 
 build_filenames () {
-    OUTPUT_FILE_PREFIX="${OUTPUT_FILE_PREFIX:-${SKETCH}-${LIB_VERSION}}"
-    HEX_FILE_PATH="${HEX_FILE_PATH:-${OUTPUT_PATH}/${OUTPUT_FILE_PREFIX}.hex}"
-    HEX_FILE_WITH_BOOTLOADER_PATH="${HEX_FILE_WITH_BOOTLOADER_PATH:-${OUTPUT_PATH}/${OUTPUT_FILE_PREFIX}-with-bootloader.hex}"
-    ELF_FILE_PATH="${ELF_FILE_PATH:-${OUTPUT_PATH}/${OUTPUT_FILE_PREFIX}.elf}"
-    LIB_FILE_PATH="${LIB_FILE_PATH:-${OUTPUT_PATH}/${OUTPUT_FILE_PREFIX}.a}"
+    : "${OUTPUT_FILE_PREFIX:=${SKETCH_BASE_NAME}-${LIB_VERSION}}"
+    : "${HEX_FILE_PATH:=${OUTPUT_PATH}/${OUTPUT_FILE_PREFIX}.hex}"
+    : "${HEX_FILE_WITH_BOOTLOADER_PATH:=${OUTPUT_PATH}/${OUTPUT_FILE_PREFIX}-with-bootloader.hex}"
+    : "${ELF_FILE_PATH:=${OUTPUT_PATH}/${OUTPUT_FILE_PREFIX}.elf}"
+    : "${LIB_FILE_PATH:=${OUTPUT_PATH}/${OUTPUT_FILE_PREFIX}.a}"
 }
 
 
@@ -105,9 +104,10 @@ firmware_size () {
         return
     fi
 
+    : "${MAX_PROG_SIZE:=$(get_arduino_pref 'upload.maximum_size')}"
+
     ## This is a terrible hack, please don't hurt me. - algernon
 
-    find_max_prog_size
     set +e
     raw_output=$("$@" 2> /dev/null)
     rc=$?
@@ -130,23 +130,21 @@ firmware_size () {
 
 
 find_sketch () {
-    SKETCH="${SKETCH:-${DEFAULT_SKETCH}}"
-    LIBRARY="${LIBRARY:-${SKETCH}}"
-    if [ -z "${SKETCH}" ] || [ -z "${LIBRARY}" ] || [ -z "${ROOT}" ] || [ -z "${SOURCEDIR}" ]; then
-        echo "SKETCH, LIBRARY, SOURCEDIR, and ROOT need to be set before including this file!" >&2
+    if [ -z "${SKETCH}" ]; then
+        echo "SKETCH needs to be set before including this file!" >&2
         exit 1
     fi
   
-    SKETCH_DIR="$SKETCH"
-    SKETCH_FILE=$(basename "$SKETCH")
+    SKETCH_DIR="${SKETCH}"
+    SKETCH_BASE_NAME=$(basename "$SKETCH")
+    SKETCH_FILE_NAME="${SKETCH_BASE_NAME}.ino"
 
     for path in "${SKETCH_DIR}" \
-		    "examples/${LIBRARY}" \
                     "src" \
 		    "."; do
-        if [ -f "${path}/${SKETCH_FILE}.ino" ]; then
+        if [ -f "${path}/${SKETCH_FILE_NAME}" ]; then
       	    SKETCH_DIR="${path}"
-	    SKETCH="${SKETCH_FILE}"
+      	    SKETCH_FILE_PATH=$(absolute_filename "${SKETCH_DIR}/${SKETCH_FILE_NAME}")
             return
         fi
     done
@@ -173,7 +171,7 @@ prompt_before_flashing () {
 }
 
 flash () {
-    maybe_build "$@"
+    compile "$@"
 
     # Check to see if we can see a keyboard bootloader port.
     # If we -can-, then we should skip over the "reset to bootloader" thing
@@ -259,39 +257,34 @@ check_bootloader_port_and_flash () {
 }
 
 flash_over_usb () {
-    if [ "${ARDUINO_VERBOSE}" != "-verbose" ]; then
-    	${AVRDUDE} \
+
+    FLASH_CMD=$(${AVRDUDE} \
 		-C "${AVRDUDE_CONF}" \
 		-p"${MCU}" \
  		-cavr109 \
 		-D \
 		-P "${DEVICE_PORT_BOOTLOADER}" \
 		-b57600 \
-		"-Uflash:w:${HEX_FILE_PATH}:i" \
-		2>&1 |grep -v ^avrdude | grep -v '^$' |grep -v '^ ' | grep -vi programmer
+		"-Uflash:w:${HEX_FILE_PATH}:i")
+
+    if [ "${ARDUINO_VERBOSE}" != "-verbose" ]; then
+	${FLASH_CMD} 2>&1 |grep -v ^avrdude | grep -v '^$' |grep -v '^ ' | grep -vi programmer
     	return "${PIPESTATUS[0]}"
     else
-    	${AVRDUDE} \
-		-C "${AVRDUDE_CONF}" \
-		-p"${MCU}" \
- 		-cavr109 \
-		-D \
-		-P "${DEVICE_PORT_BOOTLOADER}" \
-		-b57600 \
-		"-Uflash:w:${HEX_FILE_PATH}:i"
+        ${FLASH_CMD}
 	return $?
     fi
 }
 
 flash_from_bootloader() {
-    maybe_build "$@"
+    compile "$@"
     prompt_before_flashing
     find_bootloader_ports
     check_bootloader_port_and_flash
 }
 
 program() {
-    maybe_build "$@"
+    compile "$@"
     prompt_before_flashing
     flash_with_programmer
 }
@@ -306,10 +299,15 @@ flash_with_programmer() {
 	       "-Uflash:w:${HEX_FILE_PATH}:i"
 }
 
+find_bootloader_path() {
+    BOOTLOADER_FILE=$( get_arduino_pref 'bootloader.file' )
+    : "${BOOTLOADER_FILE:=caterina/Caterina.hex}"
+    : "${BOOTLOADER_PATH:=${BOARD_HARDWARE_PATH}/keyboardio/avr/bootloaders/${BOOTLOADER_FILE}}"
+}
+
+
 hex_with_bootloader () {
-    if [ ! -e "${HEX_FILE_PATH}" ]; then
-        compile
-    fi
+    compile
 
     find_bootloader_path
 
@@ -317,7 +315,7 @@ hex_with_bootloader () {
     echo "Using ${BOOTLOADER_PATH}"
     ${MD5} "${BOOTLOADER_PATH}"
     cat "${BOOTLOADER_PATH}" >> "${HEX_FILE_WITH_BOOTLOADER_PATH}"
-    ln -sf -- "${OUTPUT_FILE_PREFIX}-with-bootloader.hex" "${OUTPUT_PATH}/${SKETCH}-latest-with-bootloader.hex"
+    ln -sf -- "${OUTPUT_FILE_PREFIX}-with-bootloader.hex" "${OUTPUT_PATH}/${SKETCH_BASE_NAME}-latest-with-bootloader.hex"
     cat <<- EOF
 
 		Combined firmware and bootloader are now at ${HEX_FILE_WITH_BOOTLOADER_PATH}
@@ -326,22 +324,6 @@ hex_with_bootloader () {
 		And TEST THIS ON REAL HARDWARE BEFORE YOU GIVE IT TO ANYONE
 
 		EOF
-}
-
-maybe_build () {
-    find_sketch
-    build_version
-    build_paths
-    build_filenames
-    # If the hex file is older than the sketch file, or the hex file does not exist
-    # then rebuild. This is not as correct as letting make check our dependencies
-    # But it's less broken for most user use cases
-    # TODO(anyone): Make this suck less
-    SKETCH_FILE_PATH=$(absolute_filename "${SKETCH_DIR}/${SKETCH}.ino")
-    if [ "${HEX_FILE_PATH}" -ot "${SKETCH_FILE_PATH}" ]; then
-	build "$@"
-    fi
-
 }
 
 build () {
@@ -354,17 +336,28 @@ prepare_ccache () {
     build_paths
     enable_ccache
 }
-
 compile () {
     find_sketch
     build_version
     build_paths
     build_filenames
-    enable_ccache
+    # If the hex file is older than the sketch file, or the hex file does not exist
+    # then rebuild. This is not as correct as letting make check our dependencies
+    # But it's less broken for most user use cases
+    # TODO(anyone): Make this suck less
+    if [ "${HEX_FILE_PATH}" -ot "${SKETCH_FILE_PATH}" ]; then
+	do_compile "$@"
+    fi
+
+}
+
+
+do_compile () {
+    prepare_ccache
 
     install -d "${OUTPUT_PATH}"
 
-    echo "Building ${SKETCH_DIR}/${SKETCH}"
+    echo "Building ${SKETCH_FILE_PATH}"
 
     # This is defined in the (optional) user config.
     # shellcheck disable=SC2154
@@ -412,10 +405,10 @@ compile () {
 	      -hardware "${ARDUINO_PATH}/hardware" \
 	      -hardware "${BOARD_HARDWARE_PATH}" \
 	      ${ARDUINO_TOOLS_FLAG:+"${ARDUINO_TOOLS_FLAG}"} ${ARDUINO_TOOLS_PARAM:+"${ARDUINO_TOOLS_PARAM}"} \
-	      -tools "${ARDUINO_PATH}/tools-builder" \
+	      -tools "${ARDUINO_BUILDER_TOOLS_PATH}" \
 	      -fqbn "${FQBN}" \
         -libraries "." \
-        -libraries "${ROOT}" \
+        -libraries "${KALEIDOSCOPE_DIR}" \
 	      -libraries "${BOARD_HARDWARE_PATH}/.." \
         ${local_LIBS} \
 	      ${EXTRA_BUILDER_ARGS} \
@@ -433,16 +426,16 @@ compile () {
 	      -warnings all \
         ${ARDUINO_VERBOSE} \
 	      ${ARDUINO_AVR_GCC_PREFIX_PARAM} \
-	      "${SKETCH_DIR}/${SKETCH}.ino"
+	      "${SKETCH_FILE_PATH}"
 
     if [ -z "${LIBONLY}" ]; then
-      cp "${BUILD_PATH}/${SKETCH}.ino.hex" "${HEX_FILE_PATH}"
-      cp "${BUILD_PATH}/${SKETCH}.ino.elf" "${ELF_FILE_PATH}"
-      ln -sf "${OUTPUT_FILE_PREFIX}.hex" "${OUTPUT_PATH}/${SKETCH}-latest.hex"
-      ln -sf "${OUTPUT_FILE_PREFIX}.elf" "${OUTPUT_PATH}/${SKETCH}-latest.elf"
+      cp "${BUILD_PATH}/${SKETCH_FILE_NAME}.hex" "${HEX_FILE_PATH}"
+      cp "${BUILD_PATH}/${SKETCH_FILE_NAME}.elf" "${ELF_FILE_PATH}"
+      ln -sf "${OUTPUT_FILE_PREFIX}.hex" "${OUTPUT_PATH}/${SKETCH_BASE_NAME}-latest.hex"
+      ln -sf "${OUTPUT_FILE_PREFIX}.elf" "${OUTPUT_PATH}/${SKETCH_BASE_NAME}-latest.elf"
     else
-      cp "${BUILD_PATH}/${SKETCH}.ino.a" "${LIB_FILE_PATH}"
-      ln -sf "${OUTPUT_FILE_PREFIX}.a" "${OUTPUT_PATH}/${SKETCH}-latest.a"
+      cp "${BUILD_PATH}/${SKETCH_FILE_NAME}.a" "${LIB_FILE_PATH}"
+      ln -sf "${OUTPUT_FILE_PREFIX}.a" "${OUTPUT_PATH}/${SKETCH_BASE_NAME}-latest.a"
     fi
 
     if [ "${ARDUINO_VERBOSE}" = "-verbose" ]; then
@@ -478,7 +471,6 @@ build_all () {
 
     for plugin in ${plugins}; do
         export SKETCH="${plugin}"
-        export LIBRARY="${plugin}"
         $0 "${plugin}" build
     done
 }
@@ -489,36 +481,28 @@ compile_all () {
 
     for plugin in ${plugins}; do
         export SKETCH="${plugin}"
-        export LIBRARY="${plugin}"
         $0 "${plugin}" compile
     done
 }
 
 
 size () {
-    if [ ! -e "${HEX_FILE_PATH}" ]; then
-        compile
-    fi
+    compile
 
-    echo "- Size: firmware/${LIBRARY}/${OUTPUT_FILE_PREFIX}.elf"
+    echo "- Size: ${ELF_FILE_PATH}"
     # shellcheck disable=SC2086
     firmware_size "${AVR_SIZE}" ${AVR_SIZE_FLAGS} "${ELF_FILE_PATH}"
     echo
 }
 
 size_map () {
-    if [ ! -e "${HEX_FILE_PATH}" ]; then
-        compile
-    fi
+    compile
 
     "${AVR_NM}" --size-sort -C -r -l -t decimal "${ELF_FILE_PATH}"
 }
 
 disassemble () {
-
-    if [ ! -e "${HEX_FILE_PATH}" ]; then
-        compile
-    fi
+    compile
 
     "${AVR_OBJDUMP}" -C -d "${ELF_FILE_PATH}"
 }
@@ -528,12 +512,16 @@ decompile () {
 }
 
 clean () {
+    find_sketch
+    build_paths
     rm -rf -- "${OUTPUT_PATH}"
+    rm -rf -- "${BUILD_PATH}"
     kaleidoscope_dir="$(dirname "$0")/.."
-    (install -d "${kaleidoscope_dir}/testing/googletest/build" &&
-         cd "${kaleidoscope_dir}/testing/googletest/build" &&
+    if [ -d "${kaleidoscope_dir}/testing/googletest/build" ]; then
+         ( cd "${kaleidoscope_dir}/testing/googletest/build" &&
          cmake .. &&
          make clean)
+    fi
 }
 
 reset_device() {
@@ -597,24 +585,6 @@ EOF
     fi
 }
 
-build_gtest_gmock() {
-    kaleidoscope_dir="$(dirname "$0")/.."
-    (cd "${kaleidoscope_dir}/testing/googletest" && cmake . && make)
-}
-
-run_tests() {
-    (cd "${BOARD_HARDWARE_PATH}/keyboardio" && make prepare-virtual)
-    build_gtest_gmock
-    kaleidoscope_dir="$(dirname "$0")/.."
-    cd "${kaleidoscope_dir}/tests"
-    ${MAKE:-make}
-}
-
-docker_tests() {
-    kaleidoscope_dir="$(dirname "$0")/.."
-    cd "${kaleidoscope_dir}"
-    bin/run-docker make -C tests all
-}
 
 usage () {
     cat <<- EOF
@@ -654,8 +624,6 @@ usage () {
 		  build-all
 		    Build all Sketches we can find.
 
-      run-tests | docker-tests
-        Builds and runs the test suite, on the host, and in docker, respectively.
 		EOF
 }
 
@@ -675,28 +643,30 @@ fi
 ##
 ##  - if there is only one argument, that's a command
 
-ROOT="$(cd "$(dirname "$0")"/..; pwd)"
-export ROOT
+KALEIDOSCOPE_DIR="$(cd "$(dirname "$0")"/..; pwd)"
+# shellcheck disable=SC2034
+KALEIDOSCOPE_BIN_DIR="${KALEIDOSCOPE_DIR}/bin/"
+
+
+
+
 # shellcheck disable=SC2155
 export SOURCEDIR="$(pwd)"
 
-if [ -e "${HOME}/.kaleidoscope-builder.conf" ]; then
-    # shellcheck disable=SC1090
-    . "${HOME}/.kaleidoscope-builder.conf"
-fi
 
-if [ -e "${SOURCEDIR}/.kaleidoscope-builder.conf" ]; then
-    # shellcheck disable=SC1090
-    . "${SOURCEDIR}/.kaleidoscope-builder.conf"
-fi
+for conf_file in \
+    "${HOME}/.kaleidoscope-builder.conf" \
+    "${SOURCEDIR}/.kaleidoscope-builder.conf" \
+    "${SOURCEDIR}/kaleidoscope-builder.conf" \
+    "${KALEIDOSCOPE_DIR}/etc/kaleidoscope-builder.conf"; do
+    if [ -e "${conf_file}" ]; then
+        # shellcheck disable=SC1090
+        . "${conf_file}"
+    fi
 
-if [ -e "${SOURCEDIR}/kaleidoscope-builder.conf" ]; then
-    # shellcheck disable=SC1090
-    . "${SOURCEDIR}/kaleidoscope-builder.conf"
-fi
+done
 
 # shellcheck disable=SC1090
-. "${ROOT}/etc/kaleidoscope-builder.conf"
 
 if [ -n "${VERBOSE}" ] && [[ "${VERBOSE}" -gt 0 ]]; then
     ARDUINO_VERBOSE="-verbose"
@@ -747,11 +717,6 @@ for i in $(seq 1 $#); do
     cmds="${cmds} $(echo "$1" | tr '-' '_')"
     shift
 done
-
-LIBRARY="${SKETCH}"
-
-export SKETCH
-export LIBRARY
 
 for cmd in ${cmds}; do
     ${cmd}

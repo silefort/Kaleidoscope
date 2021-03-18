@@ -14,7 +14,6 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Kaleidoscope.h"
 #include "testing/SimHarness.h"
 
 #include "testing/fix-macros.h"
@@ -24,6 +23,14 @@ namespace kaleidoscope {
 namespace testing {
 
 void SimHarness::RunCycle() {
+  if (CycleTime() > 1) {
+    // We incrememnt the time before running the loop so that
+    // millisAtCycleStart ends up where we want it to
+    for (size_t i = 1; i < CycleTime() ; i++) {
+      // The current millis implementation gets us 1 milli per call to millis.
+      millis();
+    }
+  }
   Kaleidoscope.loop();
 }
 
@@ -31,17 +38,41 @@ void SimHarness::RunCycles(size_t n) {
   for (size_t i = 0; i < n; ++i) RunCycle();
 }
 
-void SimHarness::Press(uint8_t row, uint8_t col) {
+void SimHarness::RunForMillis(size_t t) {
+  auto start_time = Kaleidoscope.millisAtCycleStart();
+  while (Kaleidoscope.millisAtCycleStart() - start_time < t) {
+    RunCycle();
+  }
+}
+
+void SimHarness::Press(KeyAddr key_addr) {
   Kaleidoscope.device().keyScanner().setKeystate(
-    KeyAddr{row, col},
+    key_addr,
     kaleidoscope::Device::Props::KeyScanner::KeyState::Pressed);
 }
 
-void SimHarness::Release(uint8_t row, uint8_t col) {
+void SimHarness::Release(KeyAddr key_addr) {
   Kaleidoscope.device().keyScanner().setKeystate(
-    KeyAddr{row, col},
+    key_addr,
     kaleidoscope::Device::Props::KeyScanner::KeyState::NotPressed);
 }
+
+void SimHarness::Press(uint8_t row, uint8_t col) {
+  Press(KeyAddr{row, col});
+}
+
+void SimHarness::Release(uint8_t row, uint8_t col) {
+  Release(KeyAddr{row, col});
+}
+
+void SimHarness::SetCycleTime(uint8_t millis) {
+  millis_per_cycle_ = millis;
+}
+
+uint8_t SimHarness::CycleTime() const {
+  return millis_per_cycle_;
+}
+
 
 }  // namespace testing
 }  // namespace kaleidoscope

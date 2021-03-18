@@ -19,6 +19,9 @@
 #include <cstddef>
 #include <cstdint>
 
+#include "Kaleidoscope.h"
+#include "testing/fix-macros.h"
+
 namespace kaleidoscope {
 namespace testing {
 
@@ -26,9 +29,16 @@ class SimHarness {
  public:
   void RunCycle();
   void RunCycles(size_t n);
-
+  void RunForMillis(size_t t);
+  void Press(KeyAddr key_addr);
+  void Release(KeyAddr key_addr);
   void Press(uint8_t row, uint8_t col);
   void Release(uint8_t row, uint8_t col);
+  void SetCycleTime(uint8_t millis);
+  uint8_t CycleTime() const;
+
+ private:
+  uint8_t millis_per_cycle_ = 1;
 };
 
 }  // namespace testing
