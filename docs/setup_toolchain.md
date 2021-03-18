@@ -1,8 +1,11 @@
 # Setting up your development environment
 
-If you'd like to customize your keyboard's layout or functionality, the most robust and flexible option is to use the Arduino IDE.
 
 Arduino is one of the world's most widely used (and user friendly) platforms for programming "embedded" devices like the chip inside your keyboard.
+
+To customize your keyboard's layout or functionality, the most robust and flexible option is to use the Arduino IDE.
+
+If you're planning to modify Kaleidoscope itself or plan on developing Kaleidoscope plugins, you should be checking out the source code from our git repository instead. You can find instructions for that at https://github.com/keyboardio/Kaleidoscope
 
 
 # Set up the Arduino IDE
@@ -21,8 +24,6 @@ The right way to install Arduino is a little bit different depending on what ope
 
 
 ## <a name="Arduino-macOS"></a>Install Arduino on macOS
-
-
 
 1. Download the Arduino IDE install package from https://www.arduino.cc/en/Main/Software
 
@@ -46,7 +47,7 @@ Next step: [Add keyboard support to Arduino](#add-keyboard-support-to-arduino)
    Snap:        https://snapcraft.io/arduino
    Arch:        sudo pacman -S arduino
    ``` 
-   Unfortunately, the version packaged in Ubuntu is too ancient to support Arduino's new way of doing 3rd-party hardware.
+   Unfortunately, the version of the Arduino IDE packaged in Ubuntu is unmaintained and too old to use.
 
 2. Assuming you're using the tar archive, and untarring in the download directory:
 
@@ -58,22 +59,6 @@ Next step: [Add keyboard support to Arduino](#add-keyboard-support-to-arduino)
     $ sudo ./install.sh
     ```
     
-    #### How to install Flatpak on your system:
-    `https://flatpak.org/setup/`
-    
-    Then install Arduino Flatpak from terminal:
-    `$ flatpak install flathub cc.arduino.arduinoide`
-    
-    #### How to install Snap on your system:
-    `https://snapcraft.io/docs/installing-snapd`
-    
-    Then install Arduino Snap from terminal :
-    `$ sudo snap install arduino`
-    
-    Additonal install instructions and app details are on their respective pages.
-    Troubleshooting Flatpak and Snaps are beyond the scope of this document.
-    
-    
 3. On some linux distributions, ModemManager can prevent you from flashing or updating your keyboard by interfering with its virtual serial port. Additionally, by default, you may not have permissions to access your keyboard's serial port. `udev` is the Linux subsystem that managed both of these things. You should install our udev rules to manage access to your keyboard's serial port.
 
     ```sh
@@ -82,22 +67,13 @@ Next step: [Add keyboard support to Arduino](#add-keyboard-support-to-arduino)
     $ sudo /etc/init.d/udev reload
     ```
     
-    For Arch based distributions the following command will be used instead of `sudo /etc/init.d/udev reload`
+    For Arch based distributions use the following command instead of `sudo /etc/init.d/udev reload`
     ```sh
     $ sudo udevadm control --reload-rules && udevadm trigger
     ```
     
 
-4. Then disconnect and reconnect the keyboard for that change to take effect.
-
-5. You may have to tweak the `ARDUINO_PATH` (put this line in your shell-rc)
-
-    ```sh
-    export ARDUINO_PATH=/usr/local/arduino
-    ```
-    Snaps and Flatpaks should have their PATH added by their respective install process.
-
-Next step: [Add keyboard support to Arduino](#add-keyboard-support-to-arduino)
+4. Next, disconnect and reconnect your keyboard so that your computer will apply the changes.
 
 ## <a name="Arduino-Windows"></a>Install Arduino on Windows 10
 
@@ -172,10 +148,18 @@ Next step: [Add keyboard support to Arduino](#add-keyboard-support-to-arduino)
 
 ![](images/arduino-setup/open-preferences.png)
 
-3. Paste the following url into the box labeled 'Additional Board Manager URLs':
+3. To use released versions of Kaleidoscope, paste the following url into the box labeled 'Additional Board Manager URLs':
    ```
    https://raw.githubusercontent.com/keyboardio/boardsmanager/master/package_keyboardio_index.json
    ```
+
+   If you would prefer to be able to install an 'up to the minute' build of the `master` branch of Kaleidoscope from git, use this URL:
+   ```
+   https://raw.githubusercontent.com/keyboardio/arduino-kaleidoscope-master/main/package_kaleidoscope_master_index.json
+   ```
+
+   As a warning: the `master` builds may be less stable than release builds.
+
 ![](images/arduino-setup/add-boards-manager-link.png)
 
 4. Click ‘OK’ to close the dialog

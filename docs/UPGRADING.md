@@ -7,11 +7,13 @@ If any of this does not make sense to you, or you have trouble updating your .in
 
 * [Upgrade notes](#upgrade-notes)
   + [New features](#new-features)
+    - [New build system](#new-build-system)
     - [New device API](#new-device-api)
     - [New plugin API](#new-plugin-api)
     - [Bidirectional communication for plugins](#bidirectional-communication-for-plugins)
     - [Consistent timing](#consistent-timing)
   + [Breaking changes](#breaking-changes)
+    - [git checkouts aren't compatible with Arduino IDE (GUI)]([#repository-rearchitecture)
     - [Layer system switched to activation-order](#layer-system-switched-to-activation-order)
     - [The `RxCy` macros and peeking into the keyswitch state](#the-rxcy-macros-and-peeking-into-the-keyswitch-state)
     - [HostOS](#hostos)
@@ -32,6 +34,10 @@ any API we've included in a release. Typically, this means that any code that us
 
 ## New features
 
+### New build system
+
+In this release, we replace kaleidoscope-builder with a new Makefile based build system that uses `arduino-cli` instead of of the full Arduino IDE. This means that you can now check out development copies of Kaliedoscope into any directory, using the `KALEIDOSCOPE_DIR` environment variable to point to your installation.
+
 ### New device API
 
 We are introducing - or rather, replacing - the older hardware plugins, with a system that's much more composable, more extensible, and will allow us to better support new devices, different MCUs, and so on.
@@ -42,7 +48,7 @@ For end users, this doesn't come with any breaking changes. A few things have be
 
 #### For developers
 
-For those wishing to port Kaleidoscope to devices it doesn't support yet, the new API should make most things considerably easier. Please see the (work in progress) documentation in [doc/device-apis.md](doc/device-apis.md).
+For those wishing to port Kaleidoscope to devices it doesn't support yet, the new API should make most things considerably easier. Please see the documentation in [device-apis.md](api-reference/device-apis.md).
 
 The old symbols and APIs are no longer available.
 
@@ -318,13 +324,21 @@ As a developer, one can continue using `millis()`, but migrating to `Kaleidoscop
 
 ## Breaking changes
 
+### Repository rearchitecture
+
+To improve build times and to better highlight Kaleidoscope's many plugins, plugins have been move into directories inside the Kaleidoscope directory. 
+
+The "breaking change" part of this is that git checkouts of Kaleidoscope are no longer directly compatible with the Arduino IDE, since plugins aren't in a directory the IDE looks in. They are, of course, visible to tools using our commandline build infrastructure / Makefiles.
+
+When we build releases, those plugins are moved into directories inside the arduino platform packages for each architecture to make them visible to the Arduino IDE.
+
 ### Layer system switched to activation order
 
 The layer system used to be index-ordered, meaning that we'd look keys up on
 layers based on the _index_ of active layers. Kaleidoscope now uses activation
 order, which looks up keys based on the order of layer activation.
 
-This means that the following functions are deprecated, and will be removed by **2020-12-31**:
+The following functions have been removed as of **2021-01-01**:
 
 - `Layer.top()`, which used to return the topmost layer index. Use
   `Layer.mostRecent()` instead, which returns the most recently activated layer.
@@ -450,7 +464,7 @@ The new API is much shorter, and is inspired by the way the [Leader][leader]
 plugin works: instead of having a list, and a dispatching function like
 `magicComboActions`, we include the action method in the list too!
 
- [leader]: plugins/Leader.md
+ [leader]: plugins/Kaleidoscope-Leader.md
 
 We also don't make a difference between left- and right-hand anymore, you can
 just list keys for either in the same list. This will be very handy for
@@ -518,7 +532,7 @@ which accepts a value between 0 and 100 (interpreted as a percentage). User who
 used higher values for `setReleaseDelay()` will want a lower values for
 `setOverlapThreshold()`.
 
-These functions have been deprecated since 2019-08-22, and will be removed by **2020-12-31**:
+These functions have been removed as of **2020-12-31**:
 
 - `Qukeys.setTimeout(millis)`
 - `Qukeys.setReleaseDelay(millis)`
@@ -534,13 +548,13 @@ Storing the settable settings in EEPROM makes it depend on `Kaleidoscope-EEPROM-
 
 Older versions of the plugin required one to set up `Key_Redial` manually, and let the plugin know about it via `Redial.key`. This is no longer required, as the plugin sets up the redial key itself. As such, `Redial.key` was removed, and `Key_Redial` is defined by the plugin itself. To upgrade, simply remove your definition of `Key_Redial` and the `Redial.key` assignment from your sketch.
 
-### Key masking has been deprecated
+### Key masking has been removed
 
 Key masking was a band-aid introduced to avoid accidentally sending unintended keys when key mapping changes between a key being pressed and released. Since the introduction of keymap caching, this is no longer necessary, as long as we can keep the mapping consistent. Users of key masking are encouraged to find ways to use the caching mechanism instead.
 
 As an example, if you had a key event handler that in some cases masked a key, it should now map it to `Key_NoKey` instead, until released.
 
-The masking API has been deprecated, and is scheduled to be removed after **2020-11-25**.
+The masking API has been removed on **2021-01-01**
 
 ## Deprecated APIs and their replacements
 
@@ -551,19 +565,19 @@ With the move towards a monorepo-based source, some headers have moved to a new 
 The following headers and names have changed:
 
 - `layers.h`, `key_defs_keymaps.h` and `macro_helpers.h` are obsolete, and should not be included in the first place, as `Kaleidoscope.h` will pull them in. In the rare case that one needs them, prefixing them with `kaleidoscope/` is the way to go. Of the various headers provided under the `kaleidoscope/` space, only `kaleidoscope/macro_helpers.h` should be included directly, and only by hardware plugins that can't pull `Kaleidoscope.h` in due to circular dependencies.
-- `LED-Off.h`, provided by [LEDControl](plugins/LEDControl.md) is obsolete, the `LEDOff` LED mode is automatically provided by `Kaleidoscope-LEDControl.h`. The `LED-Off.h` includes can be safely removed.
+- `LED-Off.h`, provided by [LEDControl](plugins/Kaleidoscope-LEDControl.md) is obsolete, the `LEDOff` LED mode is automatically provided by `Kaleidoscope-LEDControl.h`. The `LED-Off.h` includes can be safely removed.
 - `LEDUtils.h` is automatically pulled in by `Kaleiodscope-LEDControl.h`, too, and there's no need to directly include it anymore.
 - Plugins that implement LED modes should subclass `kaleidoscope::plugin::LEDMode` instead of `kaleidoscope::LEDMode`.
-- [GhostInTheFirmware](plugins/GhostInTheFirmware.md) had the `kaleidoscope::GhostInTheFirmware::GhostKey` type replaced by `kaleidoscope::plugin::GhostInTheFirmware::GhostKey`.
-- [HostOS](plugins/HostOS.md) no longer provides the `Kaleidoscope/HostOS-select.h` header, and there is no backwards compatibility header either.
-- [Leader](plugins/Leader.md) had the `kaleidoscope::Leader::dictionary_t` type replaced by `kaleidoscope::plugin::Leader::dictionary_t`.
-- [LED-AlphaSquare](plugins/LED-AlphaSquare.md) used to provide extra symbol graphics in the `kaleidoscope::alpha_square::symbols` namespace. This is now replaced by `kaleidoscope::plugin::alpha_square::symbols`.
-- [LEDEffect-SolidColor](plugins/LEDEffect-SolidColor.md) replaced the base class  - `kaleidoscope::LEDSolidColor` - with `kaleidoscope::plugin::LEDSolidColor`.
-- [Qukeys](plugins/Qukeys.md) had the `kaleidoscope::Qukey` type replaced by `kaleidoscope::plugin::Qukey`.
-- [ShapeShifter](plugins/ShateShifter.md) had the `kaleidoscope::ShapeShifter::dictionary_t` type replaced by `kaleidoscope::plugin::ShapeShifter::dictionary_t`.
-- [SpaceCadet](plugins/SpaceCadet.md) had the `kaleidoscope::SpaceCadet::KeyBinding` type replaced by `kaleidoscope::plugin::SpaceCadet::KeyBinding`.
-- [Syster](plugins/Syster.md) had the `kaleidoscope::Syster::action_t` type replaced by `kaleidoscope::plugin::Syster::action_t`.
-- [TapDance](plugins/TapDance.md) had the `kaleidoscope::TapDance::ActionType` type replaced by `kaleidoscope::plugin::TapDance::ActionType`.
+- [GhostInTheFirmware](plugins/Kaleidoscope-GhostInTheFirmware.md) had the `kaleidoscope::GhostInTheFirmware::GhostKey` type replaced by `kaleidoscope::plugin::GhostInTheFirmware::GhostKey`.
+- [HostOS](plugins/Kaleidoscope-HostOS.md) no longer provides the `Kaleidoscope/HostOS-select.h` header, and there is no backwards compatibility header either.
+- [Leader](plugins/Kaleidoscope-Leader.md) had the `kaleidoscope::Leader::dictionary_t` type replaced by `kaleidoscope::plugin::Leader::dictionary_t`.
+- [LED-AlphaSquare](plugins/Kaleidoscope-LED-AlphaSquare.md) used to provide extra symbol graphics in the `kaleidoscope::alpha_square::symbols` namespace. This is now replaced by `kaleidoscope::plugin::alpha_square::symbols`.
+- [LEDEffect-SolidColor](plugins/Kaleidoscope-LEDEffect-SolidColor.md) replaced the base class  - `kaleidoscope::LEDSolidColor` - with `kaleidoscope::plugin::LEDSolidColor`.
+- [Qukeys](plugins/Kaleidoscope-Qukeys.md) had the `kaleidoscope::Qukey` type replaced by `kaleidoscope::plugin::Qukey`.
+- [ShapeShifter](plugins/Kaleidoscope-ShapeShifter.md) had the `kaleidoscope::ShapeShifter::dictionary_t` type replaced by `kaleidoscope::plugin::ShapeShifter::dictionary_t`.
+- [SpaceCadet](plugins/Kaleidoscope-SpaceCadet.md) had the `kaleidoscope::SpaceCadet::KeyBinding` type replaced by `kaleidoscope::plugin::SpaceCadet::KeyBinding`.
+- [Syster](plugins/Kaleidoscope-Syster.md) had the `kaleidoscope::Syster::action_t` type replaced by `kaleidoscope::plugin::Syster::action_t`.
+- [TapDance](plugins/Kaleidoscope-TapDance.md) had the `kaleidoscope::TapDance::ActionType` type replaced by `kaleidoscope::plugin::TapDance::ActionType`.
 
 # Removed APIs
 
@@ -644,7 +658,7 @@ The deprecated row/col based indexing APIs have been removed on **2020-06-16**.
 
 #### EEPROMKeymap mode
 
-The [EEPROM-Keymap](plugins/EEPROM-Keymap.md) plugin had its `setup()` method changed, the formerly optional `method` argument is now obsolete and unused. It can be safely removed.
+The [EEPROM-Keymap](plugins/Kaleidoscope-EEPROM-Keymap.md) plugin had its `setup()` method changed, the formerly optional `method` argument is now obsolete and unused. It can be safely removed.
 
 ##### keymaps array and KEYMAPS and KEYMAPS_STACKED macros
 

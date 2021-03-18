@@ -9,9 +9,9 @@ Kaleidoscope
 
 Flexible firmware for computer keyboards.
 
-This package contains the "core" of Kaleidoscope and a number of [example firmware "Sketches"](https://github.com/keyboardio/Kaleidoscope/tree/master/examples).
+This package contains the "core" of Kaleidoscope and a number of `example firmware "Sketches" <https://github.com/keyboardio/Kaleidoscope/tree/master/examples>`_
 
-If you're just getting started with the Keyboardio Model 01, the [introductory docs are here](https://github.com/keyboardio/Kaleidoscope/wiki/Keyboardio-Model-01-Introduction) and the source for the basic firmware package is here: https://github.com/keyboardio/Model01-Firmware. It's probably a good idea to start there, learn how to modify your keymap and maybe turn some modules on or off, and then come back to the full repository when you have more complex changes in mind.
+If you're just getting started with the Keyboardio Model 01, the `introductory docs are here <https://github.com/keyboardio/Kaleidoscope/wiki/Keyboardio-Model-01-Introduction>`_ and the source for the basic firmware package is here: https://github.com/keyboardio/Model01-Firmware. It's probably a good idea to start there, learn how to modify your keymap and maybe turn some modules on or off, and then come back to the full repository when you have more complex changes in mind.
 
 .. toctree::
    :caption: Installation and setup
@@ -68,10 +68,10 @@ For developers
    drivers/**
 
 .. toctree::
-   :caption: Development tips
+   :caption: Testing
    :glob:
 
-   development/**
+   testing/**
 
 
 .. toctree::
@@ -90,8 +90,8 @@ For developers
 
 
 .. toctree::
-   :caption: Docs that don't work yet 
    :maxdepth: 2
+   :caption: Examples
 
    examples
    about

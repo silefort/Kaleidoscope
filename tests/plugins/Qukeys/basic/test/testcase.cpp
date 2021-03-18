@@ -16,7 +16,7 @@
 
 #include "testing/setup-googletest.h"
 
-#include "../shared.h"
+#include "../common.h"
 
 SETUP_GOOGLETEST();
 
@@ -39,7 +39,6 @@ class QukeysBasic : public VirtualDeviceTest {
 };
 
 TEST_F(QukeysBasic, TapQukeyAlone) {
-
   // Press `A`
   sim_.Press(key_addr_A);
 
@@ -72,6 +71,8 @@ TEST_F(QukeysBasic, TapQukeyAlone) {
 }
 
 TEST_F(QukeysBasic, HoldQukeyAlone) {
+  // Prevent rapid typing suppression from affecting the test
+  sim_.RunForMillis(QUKEYS_MIN_PRIOR_INTERVAL);
 
   // Press `A`
   sim_.Press(key_addr_A);
@@ -121,6 +122,8 @@ TEST_F(QukeysBasic, HoldQukeyAlone) {
 }
 
 TEST_F(QukeysBasic, FullOverlap) {
+  // Prevent rapid typing suppression from affecting the test
+  sim_.RunForMillis(QUKEYS_MIN_PRIOR_INTERVAL);
 
   sim_.Press(key_addr_F);
   sim_.RunForMillis(20);
@@ -166,6 +169,8 @@ TEST_F(QukeysBasic, FullOverlap) {
 }
 
 TEST_F(QukeysBasic, RolloverPrimary) {
+  // Prevent rapid typing suppression from affecting the test
+  sim_.RunForMillis(QUKEYS_MIN_PRIOR_INTERVAL);
 
   sim_.Press(key_addr_F);
   sim_.RunForMillis(20);
