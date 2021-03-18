@@ -223,12 +223,12 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
     break;
   case KEY_EGRAVE:
      if (HostOS.os() == kaleidoscope::hostos::LINUX)
-       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+       if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), D(RightAlt), T(7), U(RightAlt));
       else
         return MACRODOWN(I(15), T(7));
     else {
-      if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad2), T(Keypad0), T(Keypad0), U(LeftAlt), D(LeftShift));
       else
         return MACRODOWN(I(15), T(7));
@@ -236,57 +236,57 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
     break;
   case KEY_EACUTE:
      if (HostOS.os() == kaleidoscope::hostos::LINUX)
-       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+       if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), D(RightAlt), T(2), U(RightAlt));
       else
         return MACRODOWN(I(15), T(2));
     else {
-      if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad1), T(Keypad4), T(Keypad4), U(LeftAlt), D(LeftShift));
       else
         return MACRODOWN(I(15), T(2));
     }
     break;
   case KEY_COMMA:
-    if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+    if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
       return MACRODOWN(I(15), U(LeftShift), T(Comma), D(LeftShift));
     else
       return MACRODOWN(I(15), T(M));
     break;
   case KEY_AGRAVE:
      if (HostOS.os() == kaleidoscope::hostos::LINUX)
-       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+       if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), D(RightAlt), T(0), U(RightAlt));
       else
         return MACRODOWN(I(15), T(0));
     else {
-      if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad9), T(Keypad2), U(LeftAlt), D(LeftShift));
       else
         return MACRODOWN(I(15), T(0));
     }
     break;
   case KEY_DOT:
-    if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+    if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
       return MACRODOWN(I(15), U(LeftShift), T(Period), U(LeftShift));
     else
       return MACRODOWN(I(15), D(LeftShift), T(Comma), U(LeftShift));
     break;
   case KEY_CCEDILLA:
      if (HostOS.os() == kaleidoscope::hostos::LINUX)
-       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+       if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), D(RightAlt), T(9), U(RightAlt));
       else
         return MACRODOWN(I(15), T(9));
     else {
-      if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad9), T(Keypad9), U(LeftAlt), D(LeftShift));
       else
         return MACRODOWN(I(15), T(9));
     }
     break;
   case KEY_CIRCUMFLEX:
-    if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+    if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
      return MACRODOWN(I(15), U(LeftShift), T(Slash), D(LeftShift));
     else
      return MACRODOWN(T(LeftBracket));
@@ -295,7 +295,7 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
     if (HostOS.os() == kaleidoscope::hostos::LINUX)  
       return MACRODOWN(I(15), D(RightAlt), T(O), U(RightAlt));
     else {
-      if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad4), T(Keypad0), U(LeftAlt), D(LeftShift));
       else
         return MACRODOWN(I(15), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad5), T(Keypad6), U(LeftAlt));
@@ -305,7 +305,7 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
     if (HostOS.os() == kaleidoscope::hostos::LINUX) 
       return MACRODOWN(I(15), D(RightAlt), T(Q), U(RightAlt));
     else {
-      if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad1), T(Keypad4), T(Keypad6), U(LeftAlt), D(LeftShift));
       else
         return MACRODOWN(I(15), D(LeftAlt), T(Keypad1), T(Keypad4), T(Keypad5), U(LeftAlt));
@@ -313,12 +313,12 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
     break;
   case KEY_UGRAVE:
       if (HostOS.os() == kaleidoscope::hostos::LINUX)
-       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+       if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), D(RightAlt), T(Quote), U(RightAlt));
       else
         return MACRODOWN(I(15), T(Quote));
     else {
-      if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad2), T(Keypad1), T(Keypad7), U(LeftAlt), D(LeftShift));
       else
         return MACRODOWN(I(15), T(Quote));
@@ -335,12 +335,12 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
     break;
   case KEY_APOSTROPHE:
      if (HostOS.os() == kaleidoscope::hostos::LINUX)
-       if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+       if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), T(M));
       else
         return MACRODOWN(I(15), D(RightAlt), T(G), U(RightAlt));
     else {
-      if (kaleidoscope::hid::wasModifierKeyActive(Key_LeftShift))
+      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
         return MACRODOWN(I(15), T(M));
       else
         return MACRODOWN(I(15), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad4), T(Keypad6), U(LeftAlt));
