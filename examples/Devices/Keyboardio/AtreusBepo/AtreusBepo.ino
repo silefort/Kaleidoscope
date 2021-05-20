@@ -76,7 +76,7 @@ enum {
 #define Key_Plus LSHIFT(Key_Equals)
 
 enum {
-  QWERTY,
+  AZERTY,
   FUN,
   UPPER,
   BEPO,
@@ -88,17 +88,17 @@ enum {
 
 /* *INDENT-OFF* */
 KEYMAPS(
-  [QWERTY] = KEYMAP_STACKED
+  [AZERTY] = KEYMAP_STACKED
   (
-       Key_Q   ,Key_W   ,Key_E       ,Key_R         ,Key_T
-      ,Key_A   ,Key_S   ,Key_D       ,Key_F         ,Key_G
-      ,Key_Z   ,Key_X   ,Key_C       ,Key_V         ,Key_B, Key_Backtick
-      ,Key_Esc ,Key_Tab ,Key_LeftGui ,Key_LeftShift ,Key_Backspace ,Key_LeftControl
+       Fr_A      ,Fr_Z     ,Fr_E       ,Fr_R          ,Fr_T
+      ,Fr_Q      ,Fr_S     ,Fr_D       ,Fr_F          ,Fr_G
+      ,Fr_W      ,Fr_X     ,Fr_C       ,Fr_V          ,Fr_B          ,Key_Backtick
+      ,Fr_Escape ,Fr_Tab   ,Fr_LeftGui ,Fr_LeftShift  ,Fr_Backspace  ,Fr_LeftControl
 
-                     ,Key_Y     ,Key_U      ,Key_I     ,Key_O      ,Key_P
-                     ,Key_H     ,Key_J      ,Key_K     ,Key_L      ,Key_Semicolon
-       ,Key_Backslash,Key_N     ,Key_M      ,Key_Comma ,Key_Period ,Key_Slash
-       ,Key_LeftAlt  ,Key_Space ,MO(FUN)    ,Key_Minus ,Key_Quote  ,Key_Enter
+                      ,Fr_Y        ,Fr_U      ,Fr_I      ,Fr_O       ,Fr_P
+                      ,Fr_H        ,Fr_J      ,Fr_K      ,Fr_L       ,Fr_M
+       ,Key_Backslash ,Fr_N        ,Fr_Comma  ,Key_Comma ,Key_Period ,Key_Slash
+       ,Fr_LeftAlt   ,Fr_Spacebar  ,MO(FUN)   ,Key_Minus ,Key_Quote  ,Fr_Enter
   ),
 
   [FUN] = KEYMAP_STACKED
@@ -119,12 +119,12 @@ KEYMAPS(
        Key_Insert            ,Key_Home                 ,Key_UpArrow   ,Key_End        ,Key_PageUp
       ,Key_Delete            ,Key_LeftArrow            ,Key_DownArrow ,Key_RightArrow ,Key_PageDown
       ,M(MACRO_VERSION_INFO) ,Consumer_VolumeIncrement ,XXX           ,XXX            ,___ ,___
-      ,MoveToLayer(QWERTY)   ,Consumer_VolumeDecrement ,___           ,___            ,___ ,___
+      ,MoveToLayer(AZERTY)   ,Consumer_VolumeDecrement ,___           ,___            ,___ ,___
 
                 ,Key_UpArrow   ,Key_F7              ,Key_F8          ,Key_F9         ,Key_F10
                 ,Key_DownArrow ,Key_F4              ,Key_F5          ,Key_F6         ,Key_F11
       ,___      ,XXX           ,Key_F1              ,Key_F2          ,Key_F3         ,Key_F12
-      ,MoveToLayer(BEPO)      ,___           ,MoveToLayer(QWERTY) ,Key_PrintScreen ,Key_ScrollLock ,Consumer_PlaySlashPause
+      ,MoveToLayer(BEPO)      ,___           ,MoveToLayer(AZERTY) ,Key_PrintScreen ,Key_ScrollLock ,Consumer_PlaySlashPause
    ),
 
    [BEPO] = KEYMAP_STACKED
@@ -137,7 +137,7 @@ KEYMAPS(
                       ,M(KEY_CIRCUMFLEX)  ,Fr_V           ,Fr_D               ,Fr_L          ,Fr_J
                       ,Fr_C               ,Fr_T           ,Fr_S               ,Fr_R          ,Fr_N
        ,Fr_Z          ,M(KEY_APOSTROPHE)  ,Fr_Q           ,Fr_G               ,Fr_H          ,Fr_F
-       ,Fr_M          ,Fr_Spacebar        ,Fr_Minus   ,MoveToLayer(QWERTY)    ,Fr_At         ,Fr_Enter
+       ,Fr_M          ,Fr_Spacebar        ,Fr_Minus   ,MoveToLayer(AZERTY)    ,Fr_At         ,Fr_Enter
    ),
 
    [ALT_GR] = KEYMAP_STACKED
@@ -227,7 +227,7 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
     // reasons. We used to use it in place of `MoveToLayer(QWERTY)`, but no
     // longer do. We keep it so that if someone still has the old layout with
     // the macro in EEPROM, it will keep working after a firmware update.
-    Layer.move(QWERTY);
+    Layer.move(AZERTY);
     break;
   case MACRO_VERSION_INFO:
     if (keyToggledOn(keyState)) {
