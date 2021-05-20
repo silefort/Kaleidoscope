@@ -82,7 +82,8 @@ enum {
   BEPO,
   ALT_GR,
   LEFT_LAYER,
-  RIGHT_LAYER
+  RIGHT_LAYER,
+  NUM_PAD
 };
 
 /* *INDENT-OFF* */
@@ -176,7 +177,20 @@ KEYMAPS(
              ,___          ,Fr_LessThan         ,Fr_GreaterThan       ,Fr_DoubleQuote       ,Fr_Equals
       ,___   ,___          ,M(KEY_OPENQUOTE)    ,M(KEY_CLOSEQUOTE)    ,Fr_Pound             ,Fr_Percent
       ,___   ,___          ,___                 ,___                  ,___                  ,___
-   )  
+   ),
+
+   [NUM_PAD] = KEYMAP_STACKED
+  (
+       ___   ,___   ,___   ,___   ,___
+      ,___   ,___   ,___   ,___   ,___
+      ,___   ,___   ,___   ,___   ,___    ,___
+      ,___   ,___   ,___   ,___   ,___    ,___
+
+             ,Key_KeypadDivide   ,Key_Keypad7 ,Key_Keypad8   ,Key_Keypad9        ,Key_KeypadSubtract
+             ,Key_KeypadMultiply ,Key_Keypad4 ,Key_Keypad5   ,Key_Keypad6        ,Key_KeypadAdd
+      ,___   ,___                ,Key_Keypad1 ,Key_Keypad2   ,Key_Keypad3        ,___
+      ,___   ,Key_Keypad0        ,___         ,___           ,Key_KeypadComma    ,Fr_Equals
+   )
 )
 /* *INDENT-ON* */
 
@@ -368,6 +382,7 @@ void setup() {
   EEPROMKeymap.setup(10);
 
   QUKEYS(
+    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 0), ShiftToLayer(NUM_PAD)),      // A/layer-shift (on `num_pad`)
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 3), Key_LeftShift),             // E/shift
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 8), Key_LeftShift),             // T/shift
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 11), Key_LeftControl),          // N/ctrl
