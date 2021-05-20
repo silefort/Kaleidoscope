@@ -195,11 +195,11 @@ KEYMAPS(
 /* *INDENT-ON* */
 
 void change_os(uint8_t combo_index) {
-    if (HostOS.os() == kaleidoscope::hostos::LINUX) {
-      HostOS.os(kaleidoscope::hostos::WINDOWS);
-    } else {
-      HostOS.os(kaleidoscope::hostos::LINUX);
-    }
+  if (HostOS.os() == kaleidoscope::hostos::LINUX) {
+    HostOS.os(kaleidoscope::hostos::WINDOWS);
+  } else {
+    HostOS.os(kaleidoscope::hostos::LINUX);
+  }
 }
 
 USE_MAGIC_COMBOS([CHANGE_OS] = {.action = change_os, .keys = {R3C0, R3C3}});
@@ -250,18 +250,18 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
     }
     break;
   case KEY_EACUTE:
-     if (HostOS.os() == kaleidoscope::hostos::LINUX) {
-       if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
-         return MACRODOWN(I(15), D(RightAlt), T(2), U(RightAlt));
-       } else {
-         return MACRODOWN(I(15), T(2));
-       }
-     } else {
-       if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
-         return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad1), T(Keypad4), T(Keypad4), U(LeftAlt), D(LeftShift));
-       } else {
-         return MACRODOWN(I(15), T(2));
-       }
+    if (HostOS.os() == kaleidoscope::hostos::LINUX) {
+      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
+        return MACRODOWN(I(15), D(RightAlt), T(2), U(RightAlt));
+      } else {
+        return MACRODOWN(I(15), T(2));
+      }
+    } else {
+      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
+        return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad1), T(Keypad4), T(Keypad4), U(LeftAlt), D(LeftShift));
+      } else {
+        return MACRODOWN(I(15), T(2));
+      }
     }
     break;
   case KEY_COMMA:
@@ -283,7 +283,7 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
         return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad9), T(Keypad2), U(LeftAlt), D(LeftShift));
       } else {
         return MACRODOWN(I(15), T(0));
-      } 
+      }
     }
     break;
   case KEY_DOT:
@@ -358,7 +358,7 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
   case KEY_TRIPLEDOT:
     if (HostOS.os() == kaleidoscope::hostos::LINUX) {
       return MACRODOWN(I(15), D(LeftShift), D(RightAlt), T(M), U(RightAlt), U(LeftShift));
-    } else { 
+    } else {
       return MACRODOWN(I(15), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad3), T(Keypad3), U(LeftAlt));
     }
     break;
@@ -415,7 +415,7 @@ void setup() {
   Qukeys.activate();
 
   HostOS.os(kaleidoscope::hostos::WINDOWS);
-  
+
   Kaleidoscope.setup();
   SpaceCadet.disable();
 }
