@@ -197,8 +197,7 @@ KEYMAPS(
 void change_os(uint8_t combo_index) {
     if (HostOS.os() == kaleidoscope::hostos::LINUX) {
       HostOS.os(kaleidoscope::hostos::WINDOWS);
-    }
-    else {
+    } else {
       HostOS.os(kaleidoscope::hostos::LINUX);
     }
 }
@@ -236,16 +235,18 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
     }
     break;
   case KEY_EGRAVE:
-     if (HostOS.os() == kaleidoscope::hostos::LINUX)
-       if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
+    if (HostOS.os() == kaleidoscope::hostos::LINUX) {
+      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
         return MACRODOWN(I(15), D(RightAlt), T(7), U(RightAlt));
-      else
+      } else {
         return MACRODOWN(I(15), T(7));
-    else {
-      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift))
+      }
+    } else {
+      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
         return MACRODOWN(I(15), U(LeftShift), D(LeftAlt), T(Keypad0), T(Keypad2), T(Keypad0), T(Keypad0), U(LeftAlt), D(LeftShift));
-      else
+      } else {
         return MACRODOWN(I(15), T(7));
+      }
     }
     break;
   case KEY_EACUTE:
