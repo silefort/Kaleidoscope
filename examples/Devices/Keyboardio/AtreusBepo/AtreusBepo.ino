@@ -40,7 +40,12 @@
 
 enum {
   MACRO_AZERTY,
-  MACRO_VERSION_INFO
+  MACRO_VERSION_INFO,
+  BEPO_EAIGU,
+  BEPO_EGRAVE,
+  BEPO_AGRAVE,
+  BEPO_COMMA,
+  BEPO_PERIOD,
 };
 
 #define Key_Exclamation LSHIFT(Key_1)
@@ -71,7 +76,7 @@ KEYMAPS(
 
                      ,Fr_Y     ,Fr_U      ,Fr_I     ,Fr_O      ,Fr_P
                      ,Fr_H     ,Fr_J      ,Fr_K     ,Fr_L      ,Fr_M
-       ,Fr_Backslash,Fr_N     ,Fr_Comma   ,Fr_Semicolon   ,Fr_Colon ,Fr_Equals
+       ,Key_Backslash,Fr_N     ,Fr_Comma   ,Fr_Semicolon   ,Fr_Colon ,Fr_Equals
        ,Fr_LeftAlt  ,Fr_Space ,MO(FUN)    ,Fr_RightParen ,Fr_UGrave  ,Fr_Enter
   ),
 
@@ -103,9 +108,9 @@ KEYMAPS(
 
   [BEPO] = KEYMAP_STACKED
   (
-       Fr_B   ,Fr_EAigu   ,Fr_P       ,Fr_O         ,Fr_EGrave
-      ,Fr_A   ,Fr_U   ,Fr_I       ,Fr_E         ,Fr_Comma
-      ,Fr_AGrave   ,Fr_Y   ,Fr_X       ,Fr_Period         ,Fr_K ,Fr_CCedille
+       Fr_B   ,M(BEPO_EAIGU)   ,Fr_P       ,Fr_O         ,M(BEPO_EGRAVE)
+      ,Fr_A   ,Fr_U   ,Fr_I       ,Fr_E         ,M(BEPO_COMMA)
+      ,M(BEPO_AGRAVE)   ,Fr_Y   ,Fr_X       ,M(BEPO_PERIOD)         ,Fr_K ,Fr_CCedille
       ,ML(AZERTY) ,Fr_Tab ,Fr_LeftGui ,Fr_LeftShift ,Fr_Backspace ,Fr_LeftControl
 
                      ,Fr_Circumflex     ,Fr_V      ,Fr_D     ,Fr_L      ,Fr_J
@@ -145,6 +150,44 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
       Macros.type(PSTR(BUILD_INFORMATION));
     }
     break;
+  case BEPO_EAIGU:
+    if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
+      return MACRODOWN(I(2), U(LeftShift), D(LeftAlt), D(LeftShift), T(1), U(LeftShift), U(LeftAlt), D(LeftShift),T(E), U(LeftShift));
+    } else {
+      return MACRODOWN(I(2), T(2));
+    }
+    break;
+  case BEPO_EGRAVE:
+    if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
+      return MACRODOWN(I(2), U(LeftShift), T(Backslash), D(LeftShift), T(E), U(LeftShift));
+
+    } else {
+      return MACRODOWN(I(2), T(7));
+    }
+    break;
+  case BEPO_AGRAVE:
+    if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
+      return MACRODOWN(I(2), U(LeftShift), T(Backslash), D(LeftShift), T(Q), U(LeftShift));
+
+    } else {
+      return MACRODOWN(I(2), T(0));
+    }
+    break;
+  case BEPO_COMMA:
+    if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
+      return MACRODOWN(I(2), U(LeftShift), T(Comma));
+
+    } else {
+      return MACRODOWN(I(2), U(LeftShift), T(M));
+    }
+    break;
+  case BEPO_PERIOD:
+    if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
+      return MACRODOWN(I(2), U(LeftShift), T(Period));
+    } else {
+      return MACRODOWN(I(2), D(LeftShift), T(Comma), U(LeftShift));
+    }
+    break;
   default:
     break;
   }
@@ -153,9 +196,20 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
 }
 
 void setup() {
+  EEPROMKeymap.setup(10);
+
+  QUKEYS(
+    /*kaleidoscope::plugin::Qukey(BEPOCUSTO, KeyAddr(1, 9), ShiftToLayer(SYMBOL_LAYER)),      // A/layer-shift (on `num_pad`)*/
+    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 0), Key_LeftShift),             // E/shift
+    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 11), Key_LeftShift),             // E/shift
+  )
+
+  Qukeys.setHoldTimeout(1000);
+  Qukeys.setOverlapThreshold(80);
+  Qukeys.activate();
+
   Kaleidoscope.setup();
   SpaceCadet.disable();
-  EEPROMKeymap.setup(10);
 }
 
 void loop() {
