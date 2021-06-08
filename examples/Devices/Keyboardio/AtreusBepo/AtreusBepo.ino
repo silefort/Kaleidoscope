@@ -47,6 +47,7 @@ enum {
   BEPO_COMMA,
   BEPO_PERIOD,
   BEPO_QUOTE,
+  BEPO_CIRCUMFLEX,
 };
 
 #define Key_Exclamation LSHIFT(Key_1)
@@ -114,7 +115,7 @@ KEYMAPS(
       ,M(BEPO_AGRAVE)   ,Fr_Y   ,Fr_X       ,M(BEPO_PERIOD)         ,Fr_K ,Fr_CCedille
       ,ML(AZERTY) ,Fr_Tab ,Fr_LeftGui ,Fr_LeftShift ,Fr_Backspace ,Fr_LeftControl
 
-                     ,Fr_Circumflex     ,Fr_V      ,Fr_D     ,Fr_L      ,Fr_J
+                     ,M(BEPO_CIRCUMFLEX)     ,Fr_V      ,Fr_D     ,Fr_L      ,Fr_J
                      ,Fr_C     ,Fr_T      ,Fr_S     ,Fr_R      ,Fr_N
        ,Fr_M         ,M(BEPO_QUOTE)     ,Fr_Q   ,Fr_G   ,Fr_H ,Fr_F
        ,Fr_LeftAlt   ,Fr_Space ,MO(FUN)    ,Fr_Z ,Fr_W  ,Fr_Enter
@@ -194,6 +195,13 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
       return MACRODOWN(I(2), D(LeftShift), T(M), U(LeftShift));
     } else {
       return MACRODOWN(I(2), U(LeftShift), T(4));
+    }
+    break;
+  case BEPO_CIRCUMFLEX:
+    if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
+      return MACRODOWN(I(2), U(LeftShift), T(8));
+    } else {
+      return MACRODOWN(I(2), U(LeftShift), T(LeftBracket));
     }
     break;
   default:
