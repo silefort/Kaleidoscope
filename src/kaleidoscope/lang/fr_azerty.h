@@ -17,32 +17,32 @@
 #define Fr_Slash LSHIFT(Key_Period)
 #define Fr_LeftParen Key_5
 #define Fr_RightParen Key_Minus
-#define Fr_Equals Key_Equals
+#define Fr_Equals Key_Slash
 #define Fr_QuestionMark LSHIFT(Key_M)
-#define Fr_LeftCurly ALTGR(Key_4)
-#define Fr_RightCurly ALTGR(Key_Equals)
-#define Fr_LeftBracket ALTGR(Key_5)
-#define Fr_RightBracket ALTGR(Key_Minus)
-#define Fr_Backslash ALTGR(Key_8)
+#define Fr_LeftCurly ALTGR(Fr_LeftParen)
+#define Fr_RightCurly ALTGR(Fr_RightParen)
+#define Fr_LeftBracket LSHIFT(Fr_LeftCurly)
+#define Fr_RightBracket LSHIFT(Fr_RightCurly)
+#define Fr_Backslash ALTGR(Fr_Slash)
 
 #define Fr_Backtick ALTGR(Key_7)
 
 #define Fr_At ALTGR(Key_0)
 #define Fr_Euro ALTGR(Fr_E)
 
-#define Fr_Plus LSHIFT(Key_Equals) /* Plus + Asterisk * and Tilde ~ */
-#define Fr_Asterisk Key_Backslash /* * */
+#define Fr_Plus LSHIFT(Fr_Equals) /* Plus + Asterisk * and Tilde ~ */
+#define Fr_Asterisk LSHIFT(Fr_Dollar) /* * */
 #define Fr_Tilde ALTGR(Key_2) /* ~ */
 
 #define Fr_Hash ALTGR(Key_3) /* # */
 #define Fr_Quote Key_4
 
-#define Fr_LessThan Key_NonUsBackslashAndPipe /* < and > and | */
+#define Fr_LessThan Key_Backtick
 #define Fr_GreaterThan LSHIFT(Fr_LessThan)
-#define Fr_Pipe ALTGR(Key_6)
+#define Fr_Pipe ALTGR(LSHIFT(Key_L))
 
-#define Fr_Minus Key_6 /* - and _ */
-#define Fr_Underscore Key_8
+#define Fr_Minus Key_Equals /* - and _ */
+#define Fr_Underscore LSHIFT(Fr_Minus)
 
 /* the default keys are just aliased to have them look the same */
 #define Fr_NoEvent Key_NoEvent

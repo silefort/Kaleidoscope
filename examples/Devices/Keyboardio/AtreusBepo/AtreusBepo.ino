@@ -31,12 +31,10 @@
 #include "Kaleidoscope-OneShot.h"
 #include "Kaleidoscope-Qukeys.h"
 #include "Kaleidoscope-SpaceCadet.h"
+#include "Kaleidoscope-TapDance.h"
 #include "Kaleidoscope-HostOS.h"
 #include "Kaleidoscope-Unicode.h"
 #include "Kaleidoscope-MagicCombo.h"
-
-
-
 
 #define MO(n) ShiftToLayer(n)
 #define TG(n) LockLayer(n)
@@ -62,7 +60,9 @@ enum {
   KEY_TRIPLEDOT,
   KEY_OPENQUOTE,
   KEY_CLOSEQUOTE,
-  KEY_APOSTROPHE
+  KEY_APOSTROPHE,
+  COPY_LINE,
+  CMD_TAB,
 };
 
 #define Key_Exclamation LSHIFT(Key_1)
@@ -77,13 +77,14 @@ enum {
 
 enum {
   AZERTY,
+  BEPOCUSTO,
   FUN,
   UPPER,
   BEPO,
   ALT_GR,
-  LEFT_LAYER,
-  RIGHT_LAYER,
-  NUM_PAD
+  COMBO_LAYER_1,
+  COMBO_LAYER_2,
+  SYMBOL_LAYER
 };
 
 /* *INDENT-OFF* */
@@ -92,14 +93,28 @@ KEYMAPS(
   (
        Fr_A      ,Fr_Z     ,Fr_E       ,Fr_R          ,Fr_T
       ,Fr_Q      ,Fr_S     ,Fr_D       ,Fr_F          ,Fr_G
-      ,Fr_W      ,Fr_X     ,Fr_C       ,Fr_V          ,Fr_B          ,Key_Backtick
-      ,Fr_Escape ,Fr_Tab   ,Fr_LeftGui ,Fr_LeftShift  ,Fr_Backspace  ,Fr_LeftControl
+      ,Fr_LeftGui      ,Fr_X     ,Fr_C       ,Fr_V          ,Fr_B          ,Key_Backtick
+      ,MoveToLayer(BEPOCUSTO) ,Fr_Tab   ,Fr_LeftGui ,Fr_LeftShift  ,Fr_Backspace  ,M(CMD_TAB)
 
-                      ,Fr_Y        ,Fr_U      ,Fr_I      ,Fr_O       ,Fr_P
-                      ,Fr_H        ,Fr_J      ,Fr_K      ,Fr_L       ,Fr_M
+                      ,M(COPY_LINE)        ,Fr_U      ,MoveToLayer(BEPOCUSTO)      ,Fr_O       ,Fr_P
+                      ,Key_LeftArrow        ,Key_DownArrow      ,Key_UpArrow      ,Key_RightArrow       ,Fr_M
        ,Key_Backslash ,Fr_N        ,Fr_Comma  ,Key_Comma ,Key_Period ,Key_Slash
        ,Fr_LeftAlt   ,Fr_Spacebar  ,MO(FUN)   ,Key_Minus ,Key_Quote  ,Fr_Enter
   ),
+
+  [BEPOCUSTO] = KEYMAP_STACKED
+  (
+       Fr_B           ,M(KEY_EACUTE)  ,Fr_P        ,Fr_O          ,M(KEY_EGRAVE)
+      ,Fr_A           ,Fr_U           ,Fr_I        ,Fr_E          ,M(KEY_COMMA)
+      ,M(KEY_AGRAVE)  ,Fr_Y           ,Fr_X        ,M(KEY_DOT)    ,Fr_K          , Fr_W
+      ,MoveToLayer(AZERTY)      ,Fr_Tab         ,Fr_LeftControl  ,Fr_LeftShift  ,Fr_Backspace  ,Fr_LeftGui
+
+                      ,M(KEY_CIRCUMFLEX)  ,Fr_V           ,Fr_D               ,Fr_L          ,Fr_J
+                      ,Fr_C               ,Fr_T           ,Fr_S               ,Fr_R          ,Fr_N
+       ,M(KEY_CIRCUMFLEX),M(KEY_APOSTROPHE)  ,Fr_Q           ,Fr_G               ,Fr_H          ,Fr_F
+       ,Fr_Enter          ,Fr_Spacebar        ,MO(FUN)   ,MoveToLayer(AZERTY)    ,Fr_W         ,Fr_Z
+   ),
+
 
   [FUN] = KEYMAP_STACKED
   (
@@ -131,7 +146,8 @@ KEYMAPS(
   (
        Fr_B           ,M(KEY_EACUTE)  ,Fr_P        ,Fr_O          ,M(KEY_EGRAVE)
       ,Fr_A           ,Fr_U           ,Fr_I        ,Fr_E          ,M(KEY_COMMA)
-      ,M(KEY_AGRAVE)  ,Fr_Y           ,Fr_X        ,M(KEY_DOT)    ,Fr_K          ,M(KEY_CCEDILLA)
+      ,M(KEY_AGRAVE)  ,Fr_Y  
+         ,Fr_X        ,M(KEY_DOT)    ,Fr_K          ,M(KEY_CCEDILLA)
       ,Fr_Escape      ,Fr_Tab         ,Fr_LeftGui  ,Fr_LeftShift  ,Fr_Backspace  ,Fr_W
 
                       ,M(KEY_CIRCUMFLEX)  ,Fr_V           ,Fr_D               ,Fr_L          ,Fr_J
@@ -148,49 +164,75 @@ KEYMAPS(
       ,___              ,___            ,___              ,___               ,Fr_Underscore  ,___
 
                ,___    ,___                ,___     ,___      ,___
-               ,___    ,Fr_LeftShift       ,___     ,___      ,___
+               ,M(KEY_CCEDILLA)    ,Fr_LeftShift       ,___     ,___      ,___
        ,___    ,___    ,___                ,___     ,___      ,___
        ,___    ,___    ,___                ,___     ,___      ,___
    ),
 
-  [LEFT_LAYER] = KEYMAP_STACKED
+  /*[LEFT_LAYER] = KEYMAP_STACKED*/
+  /*(*/
+       /*Fr_1           ,Fr_2                   ,Fr_3               ,Fr_4             ,Fr_5*/
+      /*,Fr_Asterisk    ,Fr_Hash                ,Fr_LeftParen       ,Fr_RightParen    ,___*/
+      /*,Fr_Slash       ,Fr_Dollar              ,Fr_LeftBracket     ,Fr_RightBracket  ,___            ,___*/
+      /*,___            ,___                    ,___                ,Key_LeftShift    ,Fr_Backspace   ,Fr_Delete*/
+
+               /*,___    ,Fr_Home        ,Fr_UpArrow     ,Fr_End          ,___*/
+               /*,___    ,Fr_LeftArrow   ,Fr_DownArrow   ,Fr_RightArrow   ,Fr_LeftShift*/
+       /*,___    ,___    ,___            ,___            ,___             ,___*/
+       /*,___    ,___    ,___            ,___            ,___             ,___*/
+   /*),*/
+
+   /*[RIGHT_LAYER] = KEYMAP_STACKED*/
+  /*(*/
+       /*___   ,___   ,___   ,___            ,Fr_F5*/
+      /*,___   ,___   ,___   ,Key_LeftShift  ,___*/
+      /*,___   ,___   ,___   ,___            ,___    ,___*/
+      /*,___   ,___   ,___   ,___            ,___    ,___*/
+
+             /*,Fr_6         ,Fr_7                ,Fr_8                 ,Fr_9                 ,Fr_0*/
+             /*,___          ,Fr_LessThan         ,Fr_GreaterThan       ,Fr_DoubleQuote       ,Fr_Equals*/
+      /*,___   ,___          ,M(KEY_OPENQUOTE)    ,M(KEY_CLOSEQUOTE)    ,Fr_Pound             ,Fr_Percent*/
+      /*,___   ,___          ,___                 ,___                  ,___                  ,___*/
+   /*),*/
+
+  [COMBO_LAYER_1] = KEYMAP_STACKED
   (
-       Fr_1           ,Fr_2                   ,Fr_3               ,Fr_4             ,Fr_5
-      ,Fr_Asterisk    ,Fr_Hash                ,Fr_LeftParen       ,Fr_RightParen    ,___
-      ,Fr_Slash       ,Fr_Dollar              ,Fr_LeftBracket     ,Fr_RightBracket  ,___            ,___
-      ,___            ,___                    ,___                ,Key_LeftShift    ,Fr_Backspace   ,Fr_Delete
+       ___   ,___   ,___   ,Fr_Escape   ,___
+      ,___   ,___   ,___   ,Fr_Tab   ,___
+      ,___   ,___   ,___   ,M(KEY_CIRCUMFLEX)  ,___    ,___
+      ,___   ,___   ,___   ,___   ,___    ,___
 
-               ,___    ,Fr_Home        ,Fr_UpArrow     ,Fr_End          ,___
-               ,___    ,Fr_LeftArrow   ,Fr_DownArrow   ,Fr_RightArrow   ,Fr_LeftShift
-       ,___    ,___    ,___            ,___            ,___             ,___
-       ,___    ,___    ,___            ,___            ,___             ,___
-   ),
+             ,___   ,Fr_7   ,Fr_8   ,Fr_9    ,Fr_Z
+             ,Fr_Comma   ,Fr_4   ,Fr_5   ,Fr_6    ,Fr_M
+      ,___   ,Fr_Period   ,Fr_1   ,Fr_2   ,Fr_3    ,Fr_0
+      ,___ ,Fr_Equals   ,Fr_Plus   ,Fr_Minus   ,Fr_Asterisk   ,Fr_Slash
+  ),
 
-   [RIGHT_LAYER] = KEYMAP_STACKED
+  [COMBO_LAYER_2] = KEYMAP_STACKED
   (
-       ___   ,___   ,___   ,___            ,Fr_F5
-      ,___   ,___   ,___   ,Key_LeftShift  ,___
-      ,___   ,___   ,___   ,___            ,___    ,___
-      ,___   ,___   ,___   ,___            ,___    ,___
+       ___   ,___   ,___   ,Fr_Escape   ,___
+      ,___   ,___   ,___   ,Fr_Tab   ,___
+      ,___   ,___   ,___   ,M(KEY_CIRCUMFLEX)  ,___    ,___
+      ,___   ,___   ,___   ,___   ,___    ,___
 
-             ,Fr_6         ,Fr_7                ,Fr_8                 ,Fr_9                 ,Fr_0
-             ,___          ,Fr_LessThan         ,Fr_GreaterThan       ,Fr_DoubleQuote       ,Fr_Equals
-      ,___   ,___          ,M(KEY_OPENQUOTE)    ,M(KEY_CLOSEQUOTE)    ,Fr_Pound             ,Fr_Percent
-      ,___   ,___          ,___                 ,___                  ,___                  ,___
-   ),
+             ,___   ,Fr_7   ,Fr_8   ,Fr_9 ,Fr_W
+             ,Fr_Comma   ,Fr_4   ,Fr_5   ,Fr_6 ,M(KEY_CCEDILLA)
+      ,___   ,Fr_Period   ,Fr_1   ,Fr_2   ,Fr_3    ,Fr_0
+      ,___ ,Fr_Equals   ,Fr_Plus   ,Fr_Minus   ,Fr_Asterisk   ,Fr_Slash
+  ),
 
-   [NUM_PAD] = KEYMAP_STACKED
+  [SYMBOL_LAYER] = KEYMAP_STACKED
   (
-       ___   ,___   ,___   ,___   ,___
-      ,___   ,___   ,___   ,___   ,___
+       Fr_Asterisk   ,Fr_Quote    ,Fr_Underscore ,Fr_Slash   ,___
+      ,Fr_LessThan   ,Fr_LeftCurly   ,Fr_LeftBracket   ,Fr_LeftParen   ,___
       ,___   ,___   ,___   ,___   ,___    ,___
       ,___   ,___   ,___   ,___   ,___    ,___
 
-             ,Key_KeypadDivide   ,Key_Keypad7 ,Key_Keypad8   ,Key_Keypad9        ,Key_KeypadSubtract
-             ,Key_KeypadMultiply ,Key_Keypad4 ,Key_Keypad5   ,Key_Keypad6        ,Key_KeypadAdd
-      ,___   ,___                ,Key_Keypad1 ,Key_Keypad2   ,Key_Keypad3        ,___
-      ,___   ,Key_Keypad0        ,___         ,___           ,Key_KeypadComma    ,Fr_Equals
-   )
+             ,___   ,Fr_Backslash   ,Fr_Minus    ,Fr_DoubleQuote    ,Fr_Plus
+             ,___   ,Fr_RightParen   ,Fr_RightBracket   ,Fr_RightCurly    ,___
+      ,___   ,___   ,___   ,___   ,___    ,___
+      ,___   ,___   ,___   ,___   ,___    ,___
+   ),
 )
 /* *INDENT-ON* */
 
@@ -214,6 +256,7 @@ KALEIDOSCOPE_INIT_PLUGINS(
   FocusSettingsCommand,
   OneShot,
   SpaceCadet,
+  TapDance,
   MouseKeys,
   MagicCombo,
   Macros
@@ -363,18 +406,10 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
     }
     break;
   case KEY_APOSTROPHE:
-    if (HostOS.os() == kaleidoscope::hostos::LINUX) {
-      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
-        return MACRODOWN(I(15), T(M));
-      } else {
-        return MACRODOWN(I(15), D(RightAlt), T(G), U(RightAlt));
-      }
+    if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
+      return MACRODOWN(I(15), T(M));
     } else {
-      if (Kaleidoscope.hid().keyboard().wasModifierKeyActive(Key_LeftShift)) {
-        return MACRODOWN(I(15), T(M));
-      } else {
-        return MACRODOWN(I(15), D(LeftAlt), T(Keypad0), T(Keypad1), T(Keypad4), T(Keypad6), U(LeftAlt));
-      }
+      return MACRODOWN(I(15), T(4));
     }
     break;
   case KEY_OPENQUOTE:
@@ -391,23 +426,61 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
       return MACRODOWN(I(15), D(LeftAlt),  T(Keypad1), T(Keypad7), T(Keypad5), U(LeftAlt));
     }
     break;
+  case CMD_TAB:
+    /*return MACRODOWN(I(15), D(RightAlt), T(X), U(RightAlt));*/
+    return MACRODOWN(I(15), D(LeftGui), T(Tab), U(LeftGui));
+    /*return MACRODOWN(I(15), D(LeftCtrl), T(A), U(LeftCtrl), D(LeftShift), D(LeftCtrl), T(E), U(LeftShift), U(LeftCtrl));*/
+    /*return MACRODOWN(I(15), D(LeftCtrl), T(Q));*/
+    break;
+  case COPY_LINE:
+    return MACRODOWN(I(15), D(LeftControl), T(A), U(LeftControl), D(LeftShift), D(LeftControl), T(E), U(LeftShift), U(LeftControl));
+    /*return MACRODOWN(I(15), D(LeftCtrl), T(Q));*/
+    break;
   default:
     break;
   }
   return MACRO_NONE;
 }
 
+void tapDanceAction(uint8_t tap_dance_index, KeyAddr key_addr, uint8_t tap_count, kaleidoscope::plugin::TapDance::ActionType tap_dance_action) {
+  switch (tap_dance_index) {
+  case 0:
+    return tapDanceActionKeys(tap_count, tap_dance_action, Fr_A, Fr_Y);
+  /*case TD_A:*/
+    /*return tapDanceActionKeys(tap_count, tap_dance_action, LSHIFT(Key_de_A), LSHIFT(Key_de_AUml));*/
+  /*case TD_o:*/
+    /*return tapDanceActionKeys(tap_count, tap_dance_action, Key_de_O, Key_de_OUml);*/
+  /*case TD_O:*/
+    /*return tapDanceActionKeys(tap_count, tap_dance_action, LSHIFT(Key_de_O), LSHIFT(Key_de_OUml));*/
+  /*case TD_u:*/
+    /*return tapDanceActionKeys(tap_count, tap_dance_action, Key_de_U, Key_de_UUml);*/
+  /*case TD_U:*/
+    /*return tapDanceActionKeys(tap_count, tap_dance_action, LSHIFT(Key_de_U), LSHIFT(Key_de_UUml));*/
+  /*case TD_E:*/
+    /*return tapDanceActionKeys(tap_count, tap_dance_action, Key_de_E, Key_de_Euro);*/
+  /*case TD_S:*/
+    /*return tapDanceActionKeys(tap_count, tap_dance_action, Key_de_S, Key_de_SS);*/
+  /*case TD_Q:*/
+    /*return tapDanceActionKeys(tap_count, tap_dance_action, Key_de_Q, Key_de_At);*/
+  } // end switch
+}
+
 void setup() {
   EEPROMKeymap.setup(10);
 
   QUKEYS(
-    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 0), ShiftToLayer(NUM_PAD)),      // A/layer-shift (on `num_pad`)
-    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 3), Key_LeftShift),             // E/shift
-    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 8), Key_LeftShift),             // T/shift
-    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 11), Key_LeftControl),          // N/ctrl
-    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(3, 6), ShiftToLayer(ALT_GR)),      // M/layer-shift (on `alt_gr`)
-    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(3, 7), ShiftToLayer(LEFT_LAYER)),  // Space/layer-shift (on `left_layer`)
-    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(3, 4), ShiftToLayer(RIGHT_LAYER))  // Backspace/layer-shift (on `right_layer`)
+    /*kaleidoscope::plugin::Qukey(BEPOCUSTO, KeyAddr(1, 3), ShiftToLayer(COL_11)),   // Switch to Column 10*/
+    kaleidoscope::plugin::Qukey(BEPOCUSTO, KeyAddr(1, 3), ShiftToLayer(COMBO_LAYER_1)),      // a/layer_1-shift (on `num_pad`)
+    kaleidoscope::plugin::Qukey(BEPOCUSTO, KeyAddr(1, 4), ShiftToLayer(COMBO_LAYER_2)),   // switch to column 11
+    kaleidoscope::plugin::Qukey(BEPOCUSTO, KeyAddr(1, 1), ShiftToLayer(SYMBOL_LAYER)),      // A/layer-shift (on `num_pad`)
+    kaleidoscope::plugin::Qukey(BEPOCUSTO, KeyAddr(1, 9), ShiftToLayer(SYMBOL_LAYER)),      // A/layer-shift (on `num_pad`)
+    kaleidoscope::plugin::Qukey(BEPOCUSTO, KeyAddr(1, 0), Key_LeftShift),             // E/shift
+    kaleidoscope::plugin::Qukey(BEPOCUSTO, KeyAddr(1, 11), Key_LeftShift),             // T/shift
+    kaleidoscope::plugin::Qukey(AZERTY, KeyAddr(3, 5), Key_LeftGui),             // T/shift
+    /*kaleidoscope::plugin::Qukey(BEPOCUSTO, KeyAddr(1, 11), Key_LeftControl),          // N/ctrl*/
+    kaleidoscope::plugin::Qukey(BEPOCUSTO, KeyAddr(3, 6), ShiftToLayer(ALT_GR)),      // M/layer-shift (on `alt_gr`)
+    /*kaleidoscope::plugin::Qukey(BEPOCUSTO, KeyAddr(3, 7), ShiftToLayer(LEFT_LAYER)),  // Space/layer-shift (on `left_layer`)*/
+    /*kaleidoscope::plugin::Qukey(BEPOCUSTO, KeyAddr(3, 4), ShiftToLayer(RIGHT_LAYER))  // Backspace/layer-shift (on `right_layer`)*/
   )
 
   Qukeys.setHoldTimeout(1000);
