@@ -13,6 +13,10 @@
 #define Fr_Dollar Key_RightBracket
 #define Fr_Pound LSHIFT(Key_RightBracket)
 #define Fr_Percent LSHIFT(Key_Quote)
+#define Fr_UGrave Key_Quote
+#define Fr_AGrave Key_0
+#define Fr_EAigu Key_2
+#define Fr_EGrave Key_7
 #define Fr_Ampersand Key_1
 #define Fr_Slash LSHIFT(Key_Period)
 #define Fr_LeftParen Key_5
@@ -24,6 +28,7 @@
 #define Fr_LeftBracket LSHIFT(Fr_LeftCurly)
 #define Fr_RightBracket LSHIFT(Fr_RightCurly)
 #define Fr_Backslash ALTGR(Fr_Slash)
+#define Fr_CCedille Key_9
 
 #define Fr_Backtick ALTGR(Key_7)
 
@@ -87,10 +92,10 @@
 #define Fr_9 LSHIFT(Key_9)
 #define Fr_0 LSHIFT(Key_0)
 #define Fr_Enter Key_Enter
-#define Fr_Escape Key_Escape
+#define Fr_Esc Key_Esc
 #define Fr_Backspace Key_Backspace
 #define Fr_Tab Key_Tab
-#define Fr_Spacebar Key_Spacebar
+#define Fr_Space Key_Space
 #define Fr_Comma Key_M
 #define Fr_Semicolon Key_Comma
 #define Fr_Period LSHIFT(Fr_Semicolon)
