@@ -64,7 +64,8 @@ enum {
   AZERTY,
   FUN,
   UPPER,
-  BEPO
+  BEPO,
+  COL_12
 };
 
 /* *INDENT-OFF* */
@@ -119,6 +120,18 @@ KEYMAPS(
                      ,Fr_C     ,Fr_T      ,Fr_S     ,Fr_R      ,Fr_N
        ,Fr_M         ,M(BEPO_QUOTE)     ,Fr_Q   ,Fr_G   ,Fr_H ,Fr_F
        ,Fr_LeftAlt   ,Fr_Space ,MO(FUN)    ,Fr_Z ,Fr_W  ,Fr_Enter
+  ),
+  [COL_12] = KEYMAP_STACKED
+  (
+       Fr_W         ,Fr_Asterisk   ,___    ,Fr_Underscore      ,Fr_Slash
+      ,Fr_CCedille  ,Fr_LeftBracket   ,Fr_LeftCurly    ,Fr_LeftParen      ,Fr_LessThan
+      ,___          ,___    ,___   ,___    ,___      ,___
+      ,___          ,___    ,___   ,___    ,___      ,___
+
+                    ,Fr_Backslash   ,Fr_Minus    ,___    ,Fr_Plus ,Fr_Z
+                    ,Fr_GreaterThan   ,Fr_RightParen    ,Fr_RightCurly    ,Fr_RightBracket ,Fr_M
+               ,___ ,Fr_DoubleQuote   ,___    ,___    ,___ ,___
+               ,___ ,___   ,___    ,___    ,___ ,___
   ),
 
 )
@@ -218,6 +231,8 @@ void setup() {
     /*kaleidoscope::plugin::Qukey(BEPOCUSTO, KeyAddr(1, 9), ShiftToLayer(SYMBOL_LAYER)),      // A/layer-shift (on `num_pad`)*/
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 0), Key_LeftShift),             // E/shift
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 11), Key_LeftShift),             // E/shift
+    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 3), ShiftToLayer(COL_12)),             // E/shift
+    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 8), ShiftToLayer(COL_12)),             // E/shift
   )
 
   Qukeys.setHoldTimeout(1000);
