@@ -66,7 +66,8 @@ enum {
   UPPER,
   BEPO,
   COL_12,
-  NUMPAD
+  NUMPAD,
+  NAVIGATION,
 };
 
 /* *INDENT-OFF* */
@@ -114,13 +115,13 @@ KEYMAPS(
   (
        Fr_B   ,M(BEPO_EAIGU)   ,Fr_P       ,Fr_O         ,M(BEPO_EGRAVE)
       ,Fr_A   ,Fr_U   ,Fr_I       ,Fr_E         ,M(BEPO_COMMA)
-      ,M(BEPO_AGRAVE)   ,Fr_Y   ,Fr_X       ,M(BEPO_PERIOD)         ,Fr_K ,MO(NUMPAD)
+      ,M(BEPO_AGRAVE)   ,Fr_Y   ,Fr_X       ,M(BEPO_PERIOD)         ,Fr_K ,Fr_Tab
       ,ML(AZERTY) ,Fr_Tab ,Fr_LeftControl ,Fr_LeftShift ,Fr_Backspace ,Fr_LeftGui
 
                      ,M(BEPO_CIRCUMFLEX)     ,Fr_V      ,Fr_D     ,Fr_L      ,Fr_J
                      ,Fr_C     ,Fr_T      ,Fr_S     ,Fr_R      ,Fr_N
        ,Fr_Enter         ,M(BEPO_QUOTE)     ,Fr_Q   ,Fr_G   ,Fr_H ,Fr_F
-       ,Fr_Space   ,Fr_Space ,MO(FUN)    ,Fr_Z ,Fr_W  ,Fr_RightAlt
+       ,Fr_Space   ,Fr_Space ,MO(FUN)    ,TG(NAVIGATION) ,Fr_W  ,Fr_RightAlt
   ),
   [COL_12] = KEYMAP_STACKED
   (
@@ -136,8 +137,8 @@ KEYMAPS(
   ),
   [NUMPAD] = KEYMAP_STACKED
   (
-      ___  ,___    ,___   ,___    ,___
-      ,___  ,___    ,___   ,___    ,___
+      Fr_Esc  ,___    ,___   ,___    ,___
+      ,Fr_Tab  ,___    ,___   ,___    ,___
       ,___  ,___    ,___   ,___    ,___      ,___
       ,___  ,___    ,___   ,___    ,___      ,___
 
@@ -145,6 +146,18 @@ KEYMAPS(
                     ,Fr_Comma ,Fr_4   ,Fr_5    ,Fr_6 ,Fr_Percent
                ,___ ,Fr_Period ,Fr_1   ,Fr_2    ,Fr_3 ,Fr_0
                ,___ ,Fr_Equals ,Fr_Plus   ,Fr_Minus    ,Fr_Asterisk ,Fr_Slash
+  ),
+  [NAVIGATION] = KEYMAP_STACKED
+  (
+      Fr_Esc  ,___    ,___   ,___    ,___
+      ,Fr_Tab  ,___    ,___   ,___    ,___
+      ,___  ,___    ,___   ,___    ,___      ,___
+      ,___  ,___    ,___   ,___    ,___      ,___
+
+                    ,___ ,Fr_Z   ,ML(BEPO)    ,Fr_9 ,___
+                    ,Fr_LeftArrow ,Fr_DownArrow   ,Fr_UpArrow    ,Fr_RightArrow ,___
+               ,___ ,___ ,___ ,___ ,___ ,___
+               ,___ ,___ ,___ ,___ ,___ ,___
   ),
 
 )
@@ -246,6 +259,7 @@ void setup() {
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 11), Key_LeftShift),             // E/shift
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 3), ShiftToLayer(COL_12)),             // E/shift
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 8), ShiftToLayer(COL_12)),             // E/shift
+    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 4), ShiftToLayer(NUMPAD)),             // E/shift
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 1), Key_LeftControl),             // E/shift
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 10), Key_LeftControl),             // E/shift
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 2), Key_RightAlt),             // E/shift
