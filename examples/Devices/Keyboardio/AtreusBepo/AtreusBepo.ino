@@ -65,7 +65,8 @@ enum {
   FUN,
   UPPER,
   BEPO,
-  COL_12
+  COL_12,
+  NUMPAD
 };
 
 /* *INDENT-OFF* */
@@ -113,7 +114,7 @@ KEYMAPS(
   (
        Fr_B   ,M(BEPO_EAIGU)   ,Fr_P       ,Fr_O         ,M(BEPO_EGRAVE)
       ,Fr_A   ,Fr_U   ,Fr_I       ,Fr_E         ,M(BEPO_COMMA)
-      ,M(BEPO_AGRAVE)   ,Fr_Y   ,Fr_X       ,M(BEPO_PERIOD)         ,Fr_K ,Fr_CCedille
+      ,M(BEPO_AGRAVE)   ,Fr_Y   ,Fr_X       ,M(BEPO_PERIOD)         ,Fr_K ,MO(NUMPAD)
       ,ML(AZERTY) ,Fr_Tab ,Fr_LeftControl ,Fr_LeftShift ,Fr_Backspace ,Fr_LeftGui
 
                      ,M(BEPO_CIRCUMFLEX)     ,Fr_V      ,Fr_D     ,Fr_L      ,Fr_J
@@ -128,10 +129,22 @@ KEYMAPS(
       ,___          ,___    ,___   ,___    ,___      ,___
       ,___          ,___    ,___   ,___    ,___      ,___
 
-                    ,Fr_Backslash   ,Fr_Minus    ,___    ,Fr_Plus ,Fr_Z
+                    ,Fr_Backslash   ,Fr_Minus    ,Fr_Dollar    ,Fr_Plus ,Fr_Z
                     ,Fr_GreaterThan   ,Fr_RightParen    ,Fr_RightCurly    ,Fr_RightBracket ,Fr_M
-               ,___ ,Fr_DoubleQuote   ,___    ,___    ,___ ,___
+               ,___ ,Fr_DoubleQuote   ,Fr_Pipe    ,Fr_Ampersand    ,Fr_Arobase , Fr_Pound
                ,___ ,___   ,___    ,___    ,___ ,___
+  ),
+  [NUMPAD] = KEYMAP_STACKED
+  (
+      ___  ,___    ,___   ,___    ,___
+      ,___  ,___    ,___   ,___    ,___
+      ,___  ,___    ,___   ,___    ,___      ,___
+      ,___  ,___    ,___   ,___    ,___      ,___
+
+                    ,Fr_Minus ,Fr_7   ,Fr_8    ,Fr_9 ,___
+                    ,Fr_Comma ,Fr_4   ,Fr_5    ,Fr_6 ,Fr_Percent
+               ,___ ,Fr_Period ,Fr_1   ,Fr_2    ,Fr_3 ,Fr_0
+               ,___ ,Fr_Equals ,Fr_Plus   ,Fr_Minus    ,Fr_Asterisk ,Fr_Slash
   ),
 
 )

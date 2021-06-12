@@ -11,7 +11,8 @@
 #define Fr_DoubleQuote Key_3
 #define Fr_Paragraph LSHIFT(Fr_ExlamationMark)
 #define Fr_Dollar Key_RightBracket
-#define Fr_Pound LSHIFT(Key_RightBracket)
+#define Fr_Arobase Key_NonUsBackslashAndPipe 
+#define Fr_Pound LSHIFT(Fr_Arobase)
 #define Fr_Percent LSHIFT(Key_Quote)
 #define Fr_UGrave Key_Quote
 #define Fr_AGrave Key_0
