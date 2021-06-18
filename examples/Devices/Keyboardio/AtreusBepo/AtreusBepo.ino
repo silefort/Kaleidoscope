@@ -116,18 +116,18 @@ KEYMAPS(
        Fr_B   ,M(BEPO_EAIGU)   ,Fr_P       ,Fr_O         ,M(BEPO_EGRAVE)
       ,Fr_A   ,Fr_U   ,Fr_I       ,Fr_E         ,M(BEPO_COMMA)
       ,M(BEPO_AGRAVE)   ,Fr_Y   ,Fr_X       ,M(BEPO_PERIOD)         ,Fr_K ,Fr_Tab
-      ,ML(AZERTY) ,Fr_Tab ,Fr_LeftControl ,Fr_LeftShift ,Fr_Backspace ,Fr_LeftGui
+      ,ML(NAVIGATION) ,Fr_Tab ,Fr_LeftControl ,Fr_LeftShift ,Fr_Backspace ,Fr_LeftGui
 
                      ,M(BEPO_CIRCUMFLEX)     ,Fr_V      ,Fr_D     ,Fr_L      ,Fr_J
                      ,Fr_C     ,Fr_T      ,Fr_S     ,Fr_R      ,Fr_N
        ,Fr_Enter         ,M(BEPO_QUOTE)     ,Fr_Q   ,Fr_G   ,Fr_H ,Fr_F
-       ,Fr_Space   ,Fr_Space ,MO(FUN)    ,TG(NAVIGATION) ,Fr_W  ,Fr_RightAlt
+       ,Fr_Space   ,Fr_Space ,MO(FUN)    ,ML(AZERTY) ,Fr_W  ,Fr_RightAlt
   ),
   [COL_12] = KEYMAP_STACKED
   (
        Fr_W         ,Fr_Asterisk   ,___    ,Fr_Underscore      ,Fr_Slash
       ,Fr_CCedille  ,Fr_LeftBracket   ,Fr_LeftCurly    ,Fr_LeftParen      ,Fr_LessThan
-      ,___          ,___    ,___   ,___    ,___      ,___
+      ,___          ,Fr_UGrave    ,___   ,Fr_Euro    ,Fr_Tilde      ,___
       ,___          ,___    ,___   ,___    ,___      ,___
 
                     ,Fr_Backslash   ,Fr_Minus    ,Fr_Dollar    ,Fr_Plus ,Fr_Z
@@ -154,12 +154,11 @@ KEYMAPS(
       ,___  ,___    ,___   ,___    ,___      ,___
       ,___  ,___    ,___   ,___    ,___      ,___
 
-                    ,___ ,Fr_Z   ,ML(BEPO)    ,Fr_9 ,___
+                    ,___ ,___   ,ML(BEPO)    ,___ ,___
                     ,Fr_LeftArrow ,Fr_DownArrow   ,Fr_UpArrow    ,Fr_RightArrow ,___
                ,___ ,___ ,___ ,___ ,___ ,___
                ,___ ,___ ,___ ,___ ,___ ,___
   ),
-
 )
 /* *INDENT-ON* */
 
@@ -262,8 +261,6 @@ void setup() {
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 4), ShiftToLayer(NUMPAD)),             // E/shift
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 1), Key_LeftControl),             // E/shift
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 10), Key_LeftControl),             // E/shift
-    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 2), Key_RightAlt),             // E/shift
-    kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 9), Key_RightAlt),             // E/shift
   )
 
   Qukeys.setHoldTimeout(1000);

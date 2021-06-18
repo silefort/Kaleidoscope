@@ -34,11 +34,11 @@
 #define Fr_Backtick ALTGR(Key_7)
 
 #define Fr_At ALTGR(Key_0)
-#define Fr_Euro ALTGR(Fr_E)
+#define Fr_Euro ALTGR(Fr_Dollar)
 
 #define Fr_Plus LSHIFT(Fr_Equals) /* Plus + Asterisk * and Tilde ~ */
 #define Fr_Asterisk LSHIFT(Fr_Dollar) /* * */
-#define Fr_Tilde ALTGR(Key_2) /* ~ */
+#define Fr_Tilde ALTGR(Fr_N) /* ~ */
 
 #define Fr_Hash ALTGR(Key_3) /* # */
 #define Fr_Quote Key_4
