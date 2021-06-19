@@ -62,8 +62,6 @@ enum {
 
 enum {
   AZERTY,
-  FUN,
-  UPPER,
   BEPO,
   COL_12,
   NUMPAD,
@@ -82,46 +80,20 @@ KEYMAPS(
                      ,Fr_Y     ,Fr_U      ,Fr_I     ,Fr_O      ,Fr_P
                      ,Fr_H     ,Fr_J      ,Fr_K     ,Fr_L      ,Fr_M
        ,Key_Backslash,Fr_N     ,Fr_Comma   ,Fr_Semicolon   ,Fr_Colon ,Fr_Equals
-       ,Fr_LeftAlt  ,Fr_Space ,MO(FUN)    ,Fr_RightParen ,Fr_UGrave  ,Fr_Enter
+       ,Fr_LeftAlt  ,Fr_Space ,ML(BEPO)    ,Fr_RightParen ,Fr_UGrave  ,Fr_Enter
   ),
-
-  [FUN] = KEYMAP_STACKED
-  (
-       Key_Exclamation ,Key_At           ,Key_UpArrow   ,Key_Dollar           ,Key_Percent
-      ,Key_LeftParen   ,Key_LeftArrow    ,Key_DownArrow ,Key_RightArrow       ,Key_RightParen
-      ,Key_LeftBracket ,Key_RightBracket ,Key_Hash      ,Key_LeftCurlyBracket ,Key_RightCurlyBracket ,Key_Caret
-      ,TG(UPPER)       ,TG(BEPO)       ,Key_LeftGui   ,Key_LeftShift        ,Key_Delete         ,Key_LeftControl
-
-                   ,Key_PageUp   ,Key_7 ,Key_8      ,Key_9 ,Key_Backspace
-                   ,Key_PageDown ,Key_4 ,Key_5      ,Key_6 ,___
-      ,Key_And     ,Key_Star     ,Key_1 ,Key_2      ,Key_3 ,Key_Plus
-      ,Key_LeftAlt ,Key_Space    ,___   ,Key_Period ,Key_0 ,Key_Equals
-   ),
-
-  [UPPER] = KEYMAP_STACKED
-  (
-       Key_Insert            ,Key_Home                 ,Key_UpArrow   ,Key_End        ,Key_PageUp
-      ,Key_Delete            ,Key_LeftArrow            ,Key_DownArrow ,Key_RightArrow ,Key_PageDown
-      ,M(MACRO_VERSION_INFO) ,Consumer_VolumeIncrement ,XXX           ,XXX            ,___ ,___
-      ,ML(AZERTY)   ,Consumer_VolumeDecrement ,___           ,___            ,___ ,___
-
-                ,Key_UpArrow   ,Key_F7              ,Key_F8          ,Key_F9         ,Key_F10
-                ,Key_DownArrow ,Key_F4              ,Key_F5          ,Key_F6         ,Key_F11
-      ,___      ,XXX           ,Key_F1              ,Key_F2          ,Key_F3         ,Key_F12
-      ,___      ,___           ,ML(AZERTY) ,Key_PrintScreen ,Key_ScrollLock ,Consumer_PlaySlashPause
-   ),
 
   [BEPO] = KEYMAP_STACKED
   (
        Fr_B   ,M(BEPO_EAIGU)   ,Fr_P       ,Fr_O         ,M(BEPO_EGRAVE)
       ,Fr_A   ,Fr_U   ,Fr_I       ,Fr_E         ,M(BEPO_COMMA)
       ,M(BEPO_AGRAVE)   ,Fr_Y   ,Fr_X       ,M(BEPO_PERIOD)         ,Fr_K ,Fr_Tab
-      ,ML(NAVIGATION) ,Fr_Tab ,Fr_LeftControl ,Fr_LeftShift ,Fr_Backspace ,Fr_LeftGui
+      ,ML(AZERTY) ,Fr_Tab ,Fr_LeftControl ,Fr_LeftShift ,Fr_Backspace ,Fr_LeftGui
 
                      ,M(BEPO_CIRCUMFLEX)     ,Fr_V      ,Fr_D     ,Fr_L      ,Fr_J
                      ,Fr_C     ,Fr_T      ,Fr_S     ,Fr_R      ,Fr_N
        ,Fr_Enter         ,M(BEPO_QUOTE)     ,Fr_Q   ,Fr_G   ,Fr_H ,Fr_F
-       ,Fr_Space   ,Fr_Space ,MO(FUN)    ,ML(AZERTY) ,Fr_W  ,Fr_RightAlt
+       ,Fr_Space   ,Fr_Space ,___    ,___ ,Fr_W  ,Fr_RightAlt
   ),
   [COL_12] = KEYMAP_STACKED
   (
@@ -159,6 +131,7 @@ KEYMAPS(
                ,___ ,___ ,___ ,___ ,___ ,___
                ,___ ,___ ,___ ,___ ,___ ,___
   ),
+
 )
 /* *INDENT-ON* */
 
@@ -177,13 +150,13 @@ KALEIDOSCOPE_INIT_PLUGINS(
 
 const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
   switch (macroIndex) {
-  case MACRO_AZERTY:
-    // This macro is currently unused, but is kept around for compatibility
-    // reasons. We used to use it in place of `MoveToLayer(AZERTY)`, but no
-    // longer do. We keep it so that if someone still has the old layout with
-    // the macro in EEPROM, it will keep working after a firmware update.
-    Layer.move(AZERTY);
-    break;
+  /*case MACRO_AZERTY:*/
+    /*// This macro is currently unused, but is kept around for compatibility*/
+    /*// reasons. We used to use it in place of `MoveToLayer(AZERTY)`, but no*/
+    /*// longer do. We keep it so that if someone still has the old layout with*/
+    /*// the macro in EEPROM, it will keep working after a firmware update.*/
+    /*Layer.move(AZERTY);*/
+    /*break;*/
   case MACRO_VERSION_INFO:
     if (keyToggledOn(keyState)) {
       Macros.type(PSTR("Keyboardio Atreus - Kaleidoscope "));
@@ -261,6 +234,8 @@ void setup() {
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 4), ShiftToLayer(NUMPAD)),             // E/shift
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 1), Key_LeftControl),             // E/shift
     kaleidoscope::plugin::Qukey(BEPO, KeyAddr(1, 10), Key_LeftControl),             // E/shift
+    kaleidoscope::plugin::Qukey(AZERTY, KeyAddr(1, 1), Key_LeftControl),             // E/shift
+    kaleidoscope::plugin::Qukey(AZERTY, KeyAddr(1, 10), Key_LeftControl),             // E/shift
   )
 
   Qukeys.setHoldTimeout(1000);
